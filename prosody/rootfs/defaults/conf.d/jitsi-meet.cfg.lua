@@ -4,7 +4,13 @@ http_default_host = "{{ .Env.XMPP_DOMAIN }}"
 
 VirtualHost "{{ .Env.XMPP_DOMAIN }}"
     {{ if .Env.ENABLE_AUTH | default "0" | toBool }}
+      {{ if .Env.ENABLE_LDAP_AUTH }}
+    authentication = "cyrus"
+    cyrus_application_name = "xmpp"
+    allow_unencrypted_plain_auth = true
+      {{else}}
     authentication = "internal_plain"
+      {{end}}
     {{ else }}
     authentication = "anonymous"
     {{ end }}
@@ -19,6 +25,9 @@ VirtualHost "{{ .Env.XMPP_DOMAIN }}"
         {{ if .Env.XMPP_MODULES }}
         "{{ join "\";\n\"" (splitList "," .Env.XMPP_MODULES) }}";
         {{ end }}
+        {{ if .Env.ENABLE_LDAP_AUTH }}
+        "auth_cyrus";
+        {{end}}
     }
 
     c2s_require_encryption = false
