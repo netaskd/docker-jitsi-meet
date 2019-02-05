@@ -247,6 +247,7 @@ Variable | Description | Default value
 `JIGASI_TRANSCRIBER_ADVERTISE_URL` | Jigasi post to the chat an url with transcription file | true
 `DISABLE_HTTPS` | Disable HTTPS, this can be useful if TLS connections are going to be handled outside of this setup | 1
 `ENABLE_HTTP_REDIRECT` | Redirects HTTP traffic to HTTPS | 1
+`ENABLE_CHROME_SCREEN_SHARING` | Enable screensharing for Chrome (has been working in Chrome since version 72) | 1
 
 ### Running on a LAN environment
 
