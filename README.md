@@ -153,6 +153,16 @@ Variable | Description | Example
 --- | --- | ---
 `ENABLE_RECORDING` | Enable recording conference to local disk | 1
 
+### Transcription configuration
+
+If you want to enable the Transcribing function, these options are required:
+
+Variable | Description | Example
+--- | --- | ---
+`ENABLE_JIGASI_TRANSCRIBER` | Enable Jigasi transcription in a conference | 1
+`GOOGLE_APPLICATION_CREDENTIALS` | Credentials for connect to Cloud Google API from Jigasi. Path located inside the container | /config/key.json
+
+For set `GOOGLE_APPLICATION_CREDENTIALS` please read https://cloud.google.com/text-to-speech/docs/quickstart-protocol section "Before you begin" from 1 to 5 paragraph
 
 ### Authentication
 
@@ -232,6 +242,9 @@ Variable | Description | Default value
 `JIBRI_BREWERY_MUC` | MUC name for the Jibri pool | jibribrewery
 `JIBRI_PENDING_TIMEOUT` | MUC connection timeout | 90
 `JIBRI_LOGS_DIR` | Directory for logs inside Jibri container | /config/logs
+`JIGASI_TRANSCRIBER_RECORD_AUDIO` | Jigasi will recordord an audio when transcriber is on | true
+`JIGASI_TRANSCRIBER_SEND_TXT` | Jigasi will send transcribed text to the chat when transcriber is on | true
+`JIGASI_TRANSCRIBER_ADVERTISE_URL` | Jigasi post to the chat an url with transcription file | true
 `DISABLE_HTTPS` | Disable HTTPS, this can be useful if TLS connections are going to be handled outside of this setup | 1
 `ENABLE_HTTP_REDIRECT` | Redirects HTTP traffic to HTTPS | 1
 

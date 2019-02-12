@@ -8,6 +8,7 @@ services:
             - '${JIGASI_PORT_MIN}-${JIGASI_PORT_MAX}:${JIGASI_PORT_MIN}-${JIGASI_PORT_MAX}/udp'
         volumes:
             - ${CONFIG}/jigasi:/config
+            - ${CONFIG}/transcripts:/tmp/transcripts
         environment:
             - ENABLE_AUTH
             - XMPP_AUTH_DOMAIN
@@ -24,6 +25,12 @@ services:
             - JIGASI_BREWERY_MUC
             - JIGASI_PORT_MIN
             - JIGASI_PORT_MAX
+            - ENABLE_JIGASI_TRANSCRIBER
+            - JIGASI_TRANSCRIBER_ADVERTISE_URL
+            - JIGASI_TRANSCRIBER_RECORD_AUDIO
+            - JIGASI_TRANSCRIBER_SEND_TXT
+            - GOOGLE_APPLICATION_CREDENTIALS
+            - LETSENCRYPT_DOMAIN
             - TZ
         depends_on:
             - prosody
