@@ -234,6 +234,10 @@ Variable | Description | Default value
 `JIGASI_BREWERY_MUC` | MUC name for the Jigasi pool | jigasibrewery
 `JIGASI_PORT_MIN` | Minimum port for media used by Jigasi | 20000
 `JIGASI_PORT_MAX` | Maximum port for media used by Jigasi | 20050
+`JIGASI_ENABLE_SDES_SRTP` | Enable SDES srtp | 1
+`JIGASI_SIP_KEEP_ALIVE_METHOD` | Keepalive method | OPTIONS
+`JIGASI_HEALTH_CHECK_SIP_URI` | Health-check extension. Jigasi will call it for healthcheck | keepalive
+`JIGASI_HEALTH_CHECK_INTERVAL` | Interval of healthcheck in milliseconds | 300000
 `JIBRI_RECORDER_USER` | Internal recorder user for Jibri client connections | recorder
 `JIBRI_RECORDER_PASSWORD` | Internal recorder password for Jibri client connections | passw0rd
 `JIBRI_RECORDING_DIR` | Directory for recordings inside Jibri container | /config/recordings
