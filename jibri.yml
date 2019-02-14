@@ -3,6 +3,7 @@ version: '3'
 services:
     jibri:
         image: jitsi/jibri
+        restart: always
         volumes:
             - ${CONFIG}/jibri:/config
         cap_add:
@@ -24,6 +25,7 @@ services:
             - JIBRI_RECORDER_PASSWORD
             - JIBRI_RECORDING_DIR
             - JIBRI_FINALIZE_RECORDING_SCRIPT_PATH
+            - JIBRI_DROPBOX_APIKEY
             - JIBRI_STRIP_DOMAIN_JID
             - JIBRI_LOGS_DIR
             - DISPLAY=:0

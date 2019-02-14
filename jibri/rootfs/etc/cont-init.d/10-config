@@ -15,6 +15,13 @@
 
 # script for finalizing must have executing bit.
 [ ! -z "${JIBRI_FINALIZE_RECORDING_SCRIPT_PATH}" ] \
+&& [ -f "${JIBRI_FINALIZE_RECORDING_SCRIPT_PATH}" ] \
+&& [ ! -x "${JIBRI_FINALIZE_RECORDING_SCRIPT_PATH}" ] \
+&& chmod +x ${JIBRI_FINALIZE_RECORDING_SCRIPT_PATH}
+
+# dropbox finalize
+[ ! -z "${JIBRI_DROPBOX_APIKEY}" ] \
+&& tpl /defaults/dropbox_upload.sh > ${JIBRI_FINALIZE_RECORDING_SCRIPT_PATH} \
 && [ ! -x "${JIBRI_FINALIZE_RECORDING_SCRIPT_PATH}" ] \
 && chmod +x ${JIBRI_FINALIZE_RECORDING_SCRIPT_PATH}
 

@@ -127,3 +127,10 @@ if [[ -f /config/phoneNumberList.json ]]; then
 
 fi
 
+if [[ "$JIBRI_DROPBOX_APIKEY" ]]; then
+    sed -i \
+        -e '/dropbox:/,+2 s#//##' \
+        -e "s#appKey: '<APP_KEY>'.*#appKey: '$JIBRI_DROPBOX_APIKEY'#" \
+    /config/config.js
+fi
+

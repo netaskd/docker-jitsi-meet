@@ -18,6 +18,7 @@ services:
             - DISABLE_HTTPS
             - ENABLE_RECORDING
             - JICOFO_AUTH_USER
+            - JIBRI_DROPBOX_APIKEY
             - LETSENCRYPT_DOMAIN
             - LETSENCRYPT_EMAIL
             - ENABLE_CHROME_SCREEN_SHARING
