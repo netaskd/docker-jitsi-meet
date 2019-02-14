@@ -107,3 +107,23 @@ if [[ ! -f /config/interface_config.js ]]; then
 
 fi
 
+if [[ -f /config/phoneNumberList.json ]]; then
+
+  cp /config/phoneNumberList.json /usr/share/jitsi-meet/libs/phoneNumberList
+
+  if [ -z "$(grep -om1 'phoneNumberList' /config/config.js)" ]; then
+
+      sed -i \
+        '/enableWelcomePage/a\
+    dialInConfCodeUrl:  "//api.jitsi.net/conferenceMapper",' \
+      /config/config.js
+
+      sed -i \
+	'/enableWelcomePage/a\
+    \n    dialInNumbersUrl: "//'${LETSENCRYPT_DOMAIN}'/libs/phoneNumberList",' \
+      /config/config.js
+
+  fi
+
+fi
+
