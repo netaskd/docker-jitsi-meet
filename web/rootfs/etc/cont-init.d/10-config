@@ -98,6 +98,13 @@ if [[ ! -f /config/config.js ]]; then
             /config/config.js
     fi
 
+    if [[ ! -z "$CALENDAR_MS_APP_ID" ]]; then
+        sed -i \
+            -e "s#// enableCalendarIntegration:.*#enableCalendarIntegration: true,#" \
+            -e "/enableCalendarIntegration/a\    microsoftApiApplicationClientID: '$CALENDAR_MS_APP_ID'," \
+            /config/config.js
+    fi
+
 fi
 
 if [[ ! -f /config/interface_config.js ]]; then

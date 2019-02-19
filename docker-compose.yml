@@ -17,6 +17,7 @@ services:
             - ENABLE_HTTP_REDIRECT
             - DISABLE_HTTPS
             - START_WITH_VIDEO_MUTED
+            - CALENDAR_MS_APP_ID
             - ENABLE_RECORDING
             - JICOFO_AUTH_USER
             - JIBRI_DROPBOX_APIKEY
