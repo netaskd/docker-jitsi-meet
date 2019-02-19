@@ -92,6 +92,12 @@ if [[ ! -f /config/config.js ]]; then
             /config/config.js
     fi
 
+    if [[ "$START_WITH_VIDEO_MUTED" == "1" ]];then
+        sed -i \
+            -e "s#// startWithVideoMuted:.*#startWithVideoMuted: true,#" \
+            /config/config.js
+    fi
+
 fi
 
 if [[ ! -f /config/interface_config.js ]]; then

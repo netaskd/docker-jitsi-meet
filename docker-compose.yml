@@ -16,6 +16,7 @@ services:
             - ENABLE_LETSENCRYPT
             - ENABLE_HTTP_REDIRECT
             - DISABLE_HTTPS
+            - START_WITH_VIDEO_MUTED
             - ENABLE_RECORDING
             - JICOFO_AUTH_USER
             - JIBRI_DROPBOX_APIKEY
