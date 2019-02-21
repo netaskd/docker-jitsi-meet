@@ -256,6 +256,7 @@ Variable | Description | Default value
 `ENABLE_CHROME_SCREEN_SHARING` | Enable screensharing for Chrome (has been working in Chrome since version 72) | 1
 `START_WITH_VIDEO_MUTED` | Mute a video when user is coming to a conference | 1
 `CALENDAR_MS_APP_ID` | Enable Microsoft calendar integarion. Set Azure application ID | 00000000-0000-0000-0000-000040240063
+`ETHERPAD_URL_BASE` | Set etherpad-lite URL | http://etherpad:9001
 
 ### Running on a LAN environment
 

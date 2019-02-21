@@ -140,6 +140,12 @@ if [[ -f /config/phoneNumberList.json ]]; then
 
 fi
 
+if [[ ! -z "${ETHERPAD_URL_BASE}" && -z "$(grep -om1 'etherpad_base:' /config/config.js)" ]]; then
+    sed -i \
+        "/enableWelcomePage/a\    etherpad_base: '//${LETSENCRYPT_DOMAIN}/etherpad/p/'," \
+        /config/config.js
+fi
+
 if [[ "$JIBRI_DROPBOX_APIKEY" ]]; then
     sed -i \
         -e '/dropbox:/,+2 s#//##' \
