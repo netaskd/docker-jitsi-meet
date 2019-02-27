@@ -1,5 +1,11 @@
 #!/usr/bin/with-contenv bash
 
+# set mapping to prosody and web from external jibri
+if [[ ! -z ${JIBRI_EXTERNAL_INSTANCE} ]]; then
+  echo "${DOCKER_HOST_ADDRESS}	${XMPP_DOMAIN}" >> /etc/hosts
+  echo "${DOCKER_HOST_ADDRESS}  ${XMPP_SERVER}" >> /etc/hosts
+fi
+
 # DISPLAY is necessary for start
 [ -z "${DISPLAY}" ] \
 && ( echo -e "\e[31mERROR: Please set DISPLAY variable.\e[39m"; kill 1; exit 1 )

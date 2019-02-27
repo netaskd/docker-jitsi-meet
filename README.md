@@ -248,6 +248,7 @@ Variable | Description | Default value
 `JIBRI_BREWERY_MUC` | MUC name for the Jibri pool | jibribrewery
 `JIBRI_PENDING_TIMEOUT` | MUC connection timeout | 90
 `JIBRI_LOGS_DIR` | Directory for logs inside Jibri container | /config/logs
+`JIBRI_EXTERNAL_INSTANCE` | Set only if the jibri hosted on a different host | 1
 `JIGASI_TRANSCRIBER_RECORD_AUDIO` | Jigasi will recordord an audio when transcriber is on | true
 `JIGASI_TRANSCRIBER_SEND_TXT` | Jigasi will send transcribed text to the chat when transcriber is on | true
 `JIGASI_TRANSCRIBER_ADVERTISE_URL` | Jigasi post to the chat an url with transcription file | true
