@@ -1,4 +1,4 @@
-version: '3'
+version: '3.7'
 
 services:
     jibri:
@@ -33,4 +33,10 @@ services:
             - TZ
         networks:
             meet.jitsi:
+        healthcheck:
+            test: ( (tail -n20 ${JIBRI_LOGS_DIR}/log.0.txt | grep -Eom1 'java.lang.Thread.run' && kill 1) || (curl -sfk https://${LETSENCRYPT_DOMAIN}/static/dialInInfo.html || kill 1))
+            interval: 3s
+            timeout: 1s
+            retries: 1
+            start_period: 2s
 

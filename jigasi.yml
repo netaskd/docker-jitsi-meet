@@ -1,9 +1,10 @@
-version: '3'
+version: '3.7'
 
 services:
     # SIP gateway (audio)
     jigasi:
         image: jitsi/jigasi
+        restart: always
         ports:
             - '${JIGASI_PORT_MIN}-${JIGASI_PORT_MAX}:${JIGASI_PORT_MIN}-${JIGASI_PORT_MAX}/udp'
         volumes:
@@ -36,7 +37,11 @@ services:
             - GOOGLE_APPLICATION_CREDENTIALS
             - LETSENCRYPT_DOMAIN
             - TZ
-        depends_on:
-            - prosody
         networks:
             meet.jitsi:
+        healthcheck:
+            test: ( curl -sf http://jvb:8080/about/health && curl -sf http://jicofo:8888/about/health ) || kill 1
+            interval: 3s
+            timeout: 1s
+            retries: 1
+            start_period: 2s

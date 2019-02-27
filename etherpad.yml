@@ -1,4 +1,4 @@
-version: '3'
+version: '3.7'
 
 services:
     # Etherpad: real-time collaborative document editing
@@ -6,3 +6,10 @@ services:
         image: jitsi/etherpad
         networks:
             meet.jitsi:
+        healthcheck:
+            test: curl -sf http://jvb:8080/about/health || pidof node|xargs kill
+            interval: 3s
+            timeout: 1s
+            retries: 1
+            start_period: 2s
+

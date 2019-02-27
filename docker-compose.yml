@@ -1,9 +1,10 @@
-version: '3'
+version: '3.7'
 
 services:
     # Frontend
     web:
         image: jitsi/web
+        restart: always
         ports:
             - '${HTTP_PORT}:80'
             - '${HTTPS_PORT}:443'
@@ -36,15 +37,25 @@ services:
         networks:
             meet.jitsi:
                 aliases:
-                    - meet.jitsi
+                    - ${XMPP_DOMAIN}
+        healthcheck:
+            test: curl -iso /dev/null -w '%{http_code}\n' http://${XMPP_SERVER}:5280/http-bind|grep 200 || kill 1
+            interval: 3s
+            timeout: 1s
+            retries: 1
+            start_period: 2s
 
     # XMPP server
     prosody:
         image: jitsi/prosody
+        restart: always
         expose:
             - '5222'
             - '5347'
             - '5280'
+        ports:
+            - '5222:5222'
+            - '5347:5347'
         volumes:
             - ${CONFIG}/prosody:/config
         environment:
@@ -89,10 +100,17 @@ services:
             meet.jitsi:
                 aliases:
                     - ${XMPP_SERVER}
+        healthcheck:
+            test: curl -iso /dev/null -w '%{http_code}\n' http://${XMPP_SERVER}:5280/http-bind|grep 200 || kill 1
+            interval: 3s
+            timeout: 1s
+            retries: 1
+            start_period: 7s
 
     # Focus component
     jicofo:
         image: jitsi/jicofo
+        restart: always
         volumes:
             - ${CONFIG}/jicofo:/config
         environment:
@@ -109,14 +127,19 @@ services:
             - JIBRI_BREWERY_MUC
             - JIBRI_PENDING_TIMEOUT
             - TZ
-        depends_on:
-            - prosody
         networks:
             meet.jitsi:
+        healthcheck:
+            test: curl -iso /dev/null -w '%{http_code}\n' http://${XMPP_SERVER}:5280/http-bind|grep 200 || kill 1
+            interval: 3s
+            timeout: 1s
+            retries: 1
+            start_period: 2s
 
     # Video bridge
     jvb:
         image: jitsi/jvb
+        restart: always
         ports:
             - '${JVB_PORT}:${JVB_PORT}/udp'
             - '${JVB_TCP_PORT}:${JVB_TCP_PORT}'
@@ -137,10 +160,14 @@ services:
             - JVB_ENABLE_APIS
             - JICOFO_AUTH_USER
             - TZ
-        depends_on:
-            - prosody
         networks:
             meet.jitsi:
+        healthcheck:
+            test: ( curl -sf http://jicofo:8888/about/health && curl -iso /dev/null -w '%{http_code}\n' http://${XMPP_SERVER}:5280/http-bind|grep 200 ) || kill 1
+            interval: 3s
+            timeout: 1s
+            retries: 1
+            start_period: 2s
 
 # Custom network so all services can communicate using a FQDN
 networks:
