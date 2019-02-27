@@ -24,6 +24,7 @@ tag-all:
 	docker tag jitsi/jicofo:latest jitsi/jicofo:$(JITSI_BUILD)
 	docker tag jitsi/jvb:latest jitsi/jvb:$(JITSI_BUILD)
 	docker tag jitsi/jigasi:latest jitsi/jigasi:$(JITSI_BUILD)
+	docker tag jitsi/jibri:latest jitsi/jibri:$(JITSI_BUILD)
 
 push-all:
 	docker push jitsi/base
