@@ -49,10 +49,6 @@ services:
     prosody:
         image: jitsi/prosody
         restart: always
-        expose:
-            - '5222'
-            - '5347'
-            - '5280'
         ports:
             - '5222:5222'
             - '5347:5347'
