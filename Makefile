@@ -1,6 +1,7 @@
 FORCE_REBUILD ?= 0
 JITSI_RELEASE ?= "stable"
 JITSI_BUILD ?= "latest"
+JITSI_REPO ?= "jitsi"
 
 ifeq ($(FORCE_REBUILD), 1)
   BUILD_ARGS = "--no-cache"
@@ -15,26 +16,29 @@ build-all:
 	BUILD_ARGS=$(BUILD_ARGS) $(MAKE) -C jvb build
 	BUILD_ARGS=$(BUILD_ARGS) $(MAKE) -C jigasi build
 	BUILD_ARGS=$(BUILD_ARGS) $(MAKE) -C jibri build
+	BUILD_ARGS=$(BUILD_ARGS) $(MAKE) -C etherpad build
 
 tag-all:
-	docker tag jitsi/base:latest jitsi/base:$(JITSI_BUILD)
-	docker tag jitsi/base-java:latest jitsi/base-java:$(JITSI_BUILD)
-	docker tag jitsi/web:latest jitsi/web:$(JITSI_BUILD)
-	docker tag jitsi/prosody:latest jitsi/prosody:$(JITSI_BUILD)
-	docker tag jitsi/jicofo:latest jitsi/jicofo:$(JITSI_BUILD)
-	docker tag jitsi/jvb:latest jitsi/jvb:$(JITSI_BUILD)
-	docker tag jitsi/jigasi:latest jitsi/jigasi:$(JITSI_BUILD)
-	docker tag jitsi/jibri:latest jitsi/jibri:$(JITSI_BUILD)
+	docker tag jitsi/base:latest $(JITSI_REPO)/base:$(JITSI_BUILD)
+	docker tag jitsi/base-java:latest $(JITSI_REPO)/base-java:$(JITSI_BUILD)
+	docker tag jitsi/web:latest $(JITSI_REPO)/web:$(JITSI_BUILD)
+	docker tag jitsi/prosody:latest $(JITSI_REPO)/prosody:$(JITSI_BUILD)
+	docker tag jitsi/jicofo:latest $(JITSI_REPO)/jicofo:$(JITSI_BUILD)
+	docker tag jitsi/jvb:latest $(JITSI_REPO)/jvb:$(JITSI_BUILD)
+	docker tag jitsi/jigasi:latest $(JITSI_REPO)/jigasi:$(JITSI_BUILD)
+	docker tag jitsi/jibri:latest $(JITSI_REPO)/jibri:$(JITSI_BUILD)
+	docker tag jitsi/etherpad:latest $(JITSI_REPO)/etherpad:$(JITSI_BUILD)
 
 push-all:
-	docker push jitsi/base
-	docker push jitsi/base-java
-	docker push jitsi/web
-	docker push jitsi/prosody
-	docker push jitsi/jicofo
-	docker push jitsi/jvb
-	docker push jitsi/jigasi
-	docker push jitsi/jibri
+	docker push $(JITSI_REPO)/base:$(JITSI_BUILD)
+	docker push $(JITSI_REPO)/base-java:$(JITSI_BUILD)
+	docker push $(JITSI_REPO)/web:$(JITSI_BUILD)
+	docker push $(JITSI_REPO)/prosody:$(JITSI_BUILD)
+	docker push $(JITSI_REPO)/jicofo:$(JITSI_BUILD)
+	docker push $(JITSI_REPO)/jvb:$(JITSI_BUILD)
+	docker push $(JITSI_REPO)/jigasi:$(JITSI_BUILD)
+	docker push $(JITSI_REPO)/jibri:$(JITSI_BUILD)
+	docker push $(JITSI_REPO)/etherpad:$(JITSI_BUILD)
 
 clean:
 	docker-compose stop
