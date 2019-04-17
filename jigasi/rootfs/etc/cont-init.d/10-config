@@ -9,4 +9,4 @@ if [[ ! -f /config/logging.properties ]]; then
 fi
 
 mkdir -pm777 /tmp/transcripts
-chown jigasi.jitsi /tmp/transcripts
+chown -R jigasi.jitsi /tmp/transcripts /config
