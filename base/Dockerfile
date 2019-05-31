@@ -19,7 +19,6 @@ RUN \
 	echo "deb http://ftp.debian.org/debian stretch-backports main" > /etc/apt/sources.list.d/backports.list && \
 	apt-dpkg-wrap apt-get update && \
 	apt-dpkg-wrap apt-get dist-upgrade -y && \
-	apt-dpkg-wrap apt-get autoremove -y --purge gnupg && \
 	apt-cleanup && \
 	chmod +x /usr/bin/frep
 
