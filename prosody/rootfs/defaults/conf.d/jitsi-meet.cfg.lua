@@ -18,6 +18,9 @@ VirtualHost "{{ .Env.XMPP_DOMAIN }}"
         key = "/config/certs/{{ .Env.XMPP_DOMAIN }}.key";
         certificate = "/config/certs/{{ .Env.XMPP_DOMAIN }}.crt";
     }
+    {{ if .Env.ENABLE_SPEAKER_STATS | default "0" | toBool }}
+    speakerstats_component = "speakerstats.{{ .Env.XMPP_DOMAIN }}"
+    {{ end }}
     modules_enabled = {
         "bosh";
         "pubsub";
@@ -28,6 +31,9 @@ VirtualHost "{{ .Env.XMPP_DOMAIN }}"
         {{ if .Env.ENABLE_LDAP_AUTH }}
         "auth_cyrus";
         {{end}}
+        {{ if .Env.ENABLE_SPEAKER_STATS | default "0" | toBool }}
+        "speakerstats";
+	{{ end }}
     }
 
     c2s_require_encryption = false
@@ -51,6 +57,11 @@ VirtualHost "{{ .Env.XMPP_RECORDER_DOMAIN }}"
       "ping";
     }
     authentication = "internal_plain"
+{{ end }}
+
+{{ if .Env.ENABLE_SPEAKER_STATS | default "0" | toBool }}
+Component "speakerstats.{{ .Env.XMPP_DOMAIN }}" "speakerstats_component"
+    muc_component = "{{ .Env.XMPP_MUC_DOMAIN }}"
 {{ end }}
 
 Component "{{ .Env.XMPP_INTERNAL_MUC_DOMAIN }}" "muc"

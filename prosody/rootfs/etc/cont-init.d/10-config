@@ -82,3 +82,7 @@ fi
 # certs will be created in /config/data
 mv /config/data/*.{crt,key} /config/certs/
 rm -f /config/data/*.cnf
+
+# show notice about prosody-plugins-custom
+[[ -z "$(ls /prosody-plugins-custom)" ]] && echo "WARNING: /prosody-plugins-custom has not modules!"
+

@@ -258,6 +258,7 @@ Variable | Description | Default value
 `START_WITH_VIDEO_MUTED` | Mute a video when user is coming to a conference | 1
 `CALENDAR_MS_APP_ID` | Enable Microsoft calendar integarion. Set Azure application ID | 00000000-0000-0000-0000-000040240063
 `ETHERPAD_URL_BASE` | Set etherpad-lite URL | http://etherpad:9001
+`ENABLE_SPEAKER_STATS` | Enable speaker statistics. Before enable it, make sure that modules from project jitsi-meet/resources/prosody-plugins successfully loads to /prosody-plugins-custom | 1
 
 ### Running on a LAN environment
 
