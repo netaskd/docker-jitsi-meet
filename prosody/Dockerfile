@@ -3,7 +3,7 @@ FROM jitsi/base
 RUN \
 	apt-dpkg-wrap apt-get update && \
 	apt-dpkg-wrap apt-get install -t stretch-backports -y prosody \
-		sasl2-bin libsasl2-modules-ldap lua-ldap \
+		sasl2-bin libsasl2-modules-ldap lua-ldap patch \
 		luarocks git libsasl2-dev gcc liblua5.2-dev \
 	&& cd /tmp \
 	&& apt download jitsi-meet-tokens \
