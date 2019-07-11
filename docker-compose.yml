@@ -155,6 +155,7 @@ services:
             - JVB_TCP_PORT
             - JVB_STUN_SERVERS
             - JVB_ENABLE_APIS
+            - JVB_OCTO_REGION
             - JICOFO_AUTH_USER
             - TZ
         networks:
