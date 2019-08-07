@@ -142,7 +142,7 @@ fi
 
 if [[ ! -z "${ETHERPAD_URL_BASE}" && -z "$(grep -om1 'etherpad_base:' /config/config.js)" ]]; then
     sed -i \
-        "/enableWelcomePage/a\    etherpad_base: '//${LETSENCRYPT_DOMAIN}/etherpad/p/'," \
+        "/enableWelcomePage/a\    etherpad_base: '/etherpad/p/'," \
         /config/config.js
 fi
 
