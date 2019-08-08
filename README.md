@@ -229,7 +229,6 @@ Variable | Description | Default value
 `JVB_TCP_PORT` | TCP port for media used by Jitsi Videobridge when the TCP Harvester is enabled | 4443
 `JVB_BREWERY_MUC` | MUC name for the JVB pool | jvbbrewery
 `JVB_ENABLE_APIS` | Comma separated list of JVB APIs to enable | none
-`JVB_OCTO_REGION` | Set region for providing JVB instance. For work you have to set octo->probability and deploymentInfo->userRegion properties in config.js | us-east-1
 `JIGASI_XMPP_USER` | XMPP user for Jigasi MUC client connections | jigasi
 `JIGASI_XMPP_PASSWORD` | XMPP password for Jigasi MUC client connections | passw0rd
 `JIGASI_BREWERY_MUC` | MUC name for the Jigasi pool | jigasibrewery
@@ -260,6 +259,36 @@ Variable | Description | Default value
 `CALENDAR_MS_APP_ID` | Enable Microsoft calendar integarion. Set Azure application ID | 00000000-0000-0000-0000-000040240063
 `ETHERPAD_URL_BASE` | Set etherpad-lite URL | http://etherpad:9001
 `ENABLE_SPEAKER_STATS` | Enable speaker statistics. Before enable it, make sure that modules from project jitsi-meet/resources/prosody-plugins successfully loads to /prosody-plugins-custom | 1
+
+#### Setting up Octo (cascaded bridges)
+NOTE: For get working octo properly you have to set header "X-User-Region" before it passing to nginx. It can be realized via geoip or another logic and it's not described here.
+
+The header "X-User-Region" will be passed through nginx and dynamically set variable for `userRegion` in config.js file via ssi nginx module.
+If `userRegion` and `JVB_OCTO_REGION` the same region, user will be connected to the instanse JVB that has this region.
+
+This behavion already preconfigured and receiving X-User-Region in config.js looks like this:
+
+```
+deploymentInfo: {
+    // shard: "shard1",
+    // region: europe" -->',
+    userRegion: '<!--#echo var="http_x_user_region" default="us-east-1" -->'
+},
+```
+
+If you want to enable the Octo cascading briges, these options are required:
+
+Variable | Description | Default value
+--- | --- | ---
+`JICOFO_BRIDGE_SELECTION_STRATEGY` | Bridge selection stratagy for new connections | RegionBasedBridgeSelectionStrategy
+`JVB_OCTO_BIND_PORT` | The UDP port number which the Octo relay should use | 4096
+`JVB_OCTO_REGION` | The region that the jitsi-videbridge instance is in | us-east-1
+
+The brige selection stratagy is:
+
+* `SplitBridgeSelectionStrategy` - can be used for testing. It tries to select a new bridge for each client, regardless of the regions.
+
+* `RegionBasedBridgeSelectionStrategy` - matches the region of the clients to the region of the Jitsi Videobridge instances. Used by default.
 
 ### Running on a LAN environment
 
