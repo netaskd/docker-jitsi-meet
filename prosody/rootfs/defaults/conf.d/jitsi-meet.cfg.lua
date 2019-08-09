@@ -31,9 +31,6 @@ VirtualHost "{{ .Env.XMPP_DOMAIN }}"
         {{ if .Env.ENABLE_LDAP_AUTH }}
         "auth_cyrus";
         {{end}}
-        {{ if .Env.ENABLE_SPEAKER_STATS | default "0" | toBool }}
-        "speakerstats";
-	{{ end }}
     }
 
     c2s_require_encryption = false

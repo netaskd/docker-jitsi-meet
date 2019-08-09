@@ -37,6 +37,8 @@ if [[ "$ENABLE_LDAP_AUTH" == "yes" || "$ENABLE_LDAP_AUTH" == "1" || "$ENABLE_LDA
 
 fi
 
+grep -q speakerstats <<< ${XMPP_MUC_MODULES} && export ENABLE_SPEAKER_STATS=1
+
 PROSODY_CFG="/config/prosody.cfg.lua"
 
 if [[ ! -d /config/data ]]; then
