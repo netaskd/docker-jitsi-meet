@@ -2,7 +2,7 @@ FROM jitsi/base
 
 RUN \
     apt-dpkg-wrap apt-get update \
-    && apt-dpkg-wrap apt-get install -t stretch-backports -y \
+    && apt-dpkg-wrap apt-get install -y \
       prosody \
       liblua5.2-dev \
       sasl2-bin \
@@ -18,7 +18,7 @@ RUN \
     && luarocks install cyrussasl 1.1.0-1 \
     && luarocks install lua-cjson 2.1.0-1 \
     && luarocks install luajwtjitsi 1.3-7 \
-    && apt-dpkg-wrap apt-get remove -t stretch-backports -y \
+    && apt-dpkg-wrap apt-get remove -y \
       git \
       gcc \
       luarocks \

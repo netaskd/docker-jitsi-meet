@@ -19,6 +19,12 @@ build:
 tag:
 	docker tag jitsi/$(JITSI_SERVICE):latest $(JITSI_REPO)/$(JITSI_SERVICE):$(JITSI_BUILD)
 
+back:
+	docker tag $(JITSI_REPO)/$(JITSI_SERVICE):$(JITSI_BUILD) $(JITSI_REPO)/$(JITSI_SERVICE):bak
+
+unback:
+	docker tag $(JITSI_REPO)/$(JITSI_SERVICE):bak $(JITSI_REPO)/$(JITSI_SERVICE):$(JITSI_BUILD)
+
 push:
 	docker push $(JITSI_REPO)/$(JITSI_SERVICE):$(JITSI_BUILD)
 
