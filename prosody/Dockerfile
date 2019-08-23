@@ -1,7 +1,8 @@
 FROM jitsi/base
 
 RUN \
-    apt-dpkg-wrap apt-get update \
+    echo "deb http://security.debian.org/debian-security stretch/updates main" > /etc/apt/sources.list.d/stretch.list \
+    && apt-dpkg-wrap apt-get update \
     && apt-dpkg-wrap apt-get install -y \
       prosody \
       liblua5.2-dev \
@@ -26,7 +27,7 @@ RUN \
       libssl1.0-dev \
       liblua5.2-dev \
     && apt-cleanup \
-    && rm -rf /etc/prosody /var/cache/apt
+    && rm -rf /etc/prosody /var/cache/apt /etc/apt/sources.list.d/stretch.list
 
 RUN \
     apt-dpkg-wrap apt-get update \
