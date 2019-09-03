@@ -4,8 +4,9 @@ JITSI_BUILD ?= latest
 JITSI_REPO ?= jitsi
 JITSI_SERVICES ?= base base-java web prosody jicofo jvb jigasi jibri etherpad
 
+BUILD_ARGS := --build-arg JITSI_REPO=$(JITSI_REPO)
 ifeq ($(FORCE_REBUILD), 1)
-  BUILD_ARGS = "--no-cache"
+  BUILD_ARGS := $(BUILD_ARGS) --no-cache
 endif
 
 
@@ -14,10 +15,10 @@ all:	build-all
 release: tag-all push-all
 
 build:
-	$(MAKE) BUILD_ARGS=$(BUILD_ARGS) JITSI_RELEASE=$(JITSI_RELEASE) -C $(JITSI_SERVICE) build
+	$(MAKE) BUILD_ARGS="$(BUILD_ARGS)" JITSI_REPO="$(JITSI_REPO)" JITSI_RELEASE="$(JITSI_RELEASE)" -C $(JITSI_SERVICE) build
 
 tag:
-	docker tag jitsi/$(JITSI_SERVICE):latest $(JITSI_REPO)/$(JITSI_SERVICE):$(JITSI_BUILD)
+	docker tag $(JITSI_REPO)/$(JITSI_SERVICE):latest $(JITSI_REPO)/$(JITSI_SERVICE):$(JITSI_BUILD)
 
 back:
 	docker tag $(JITSI_REPO)/$(JITSI_SERVICE):$(JITSI_BUILD) $(JITSI_REPO)/$(JITSI_SERVICE):bak

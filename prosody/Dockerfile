@@ -1,4 +1,5 @@
-FROM jitsi/base
+ARG JITSI_REPO=jitsi
+FROM ${JITSI_REPO}/base
 
 RUN \
     echo "deb http://security.debian.org/debian-security stretch/updates main" > /etc/apt/sources.list.d/stretch.list \
