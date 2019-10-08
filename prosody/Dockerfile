@@ -1,11 +1,12 @@
 ARG JITSI_REPO=jitsi
 FROM ${JITSI_REPO}/base
+ARG VERSION
 
 RUN \
     echo "deb http://security.debian.org/debian-security stretch/updates main" > /etc/apt/sources.list.d/stretch.list \
     && apt-dpkg-wrap apt-get update \
     && apt-dpkg-wrap apt-get install -y \
-      prosody \
+      prosody=${VERSION:-*} \
       liblua5.2-dev \
       sasl2-bin \
       libsasl2-modules-ldap \

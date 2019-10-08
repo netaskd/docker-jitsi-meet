@@ -3,10 +3,11 @@ FROM ${JITSI_REPO}/base-java
 
 ARG CHROME_RELEASE=latest
 ARG CHROMEDRIVER_MAJOR_RELEASE=latest
+ARG VERSION
 
 RUN \
 	apt-dpkg-wrap apt-get update \
-	&& apt-dpkg-wrap apt-get install -y jibri jitsi-upload-integrations \
+	&& apt-dpkg-wrap apt-get install -y jibri=${VERSION:-*} \
 	&& apt-cleanup
 
 RUN \
@@ -34,6 +35,12 @@ RUN \
 	| zcat >> /usr/bin/chromedriver \
 	&& chmod +x /usr/bin/chromedriver \
 	&& chromedriver --version
+
+RUN \
+        echo "deb https://download.jitsi.org unstable/" > /etc/apt/sources.list.d/jitsi.list \
+        && apt-dpkg-wrap apt-get update \
+        && apt-dpkg-wrap apt-get install -y jitsi-upload-integrations \
+        && apt-cleanup
 
 COPY rootfs/ /
 
