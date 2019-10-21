@@ -24,7 +24,7 @@ RUN \
 RUN \
 	[ "$JITSI_RELEASE" = "unstable" ] && \
 	apt-dpkg-wrap apt-get update && \
-	apt-dpkg-wrap apt-get install -y jq procps vim iputils-ping net-tools openssh-client && \
+	apt-dpkg-wrap apt-get install -y jq procps vim iputils-ping net-tools openssh-client tcpdump && \
 	apt-cleanup || \
 	true
 
