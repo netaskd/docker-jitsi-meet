@@ -2,7 +2,9 @@
 
 JAVA_SYS_PROPS="-Dnet.java.sip.communicator.SC_HOME_DIR_LOCATION=/ -Dnet.java.sip.communicator.SC_HOME_DIR_NAME=config -Djava.util.logging.config.file=/config/logging.properties"
 
-PUBLIC_ADDRESS="$(curl -4qs --connect-timeout 15 icanhazip.com)"
+if [[ -z "$PUBLIC_ADDRESS" ]]; then
+  PUBLIC_ADDRESS="$(curl -4qs --connect-timeout 15 icanhazip.com)"
+fi
 
 if [[ ! -z "$PUBLIC_ADDRESS" ]]; then
     LOCAL_ADDRESS="$(hostname -I | cut -d " " -f1)"
