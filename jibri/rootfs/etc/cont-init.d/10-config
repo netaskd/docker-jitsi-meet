@@ -27,12 +27,6 @@ usermod -aG ${host_audio_group} jibri
 && [ ! -x "${JIBRI_FINALIZE_RECORDING_SCRIPT_PATH}" ] \
 && chmod +x ${JIBRI_FINALIZE_RECORDING_SCRIPT_PATH}
 
-# dropbox finalize
-[ ! -z "${JIBRI_DROPBOX_APIKEY}" ] \
-&& tpl /defaults/dropbox_upload.sh > ${JIBRI_FINALIZE_RECORDING_SCRIPT_PATH} \
-&& [ ! -x "${JIBRI_FINALIZE_RECORDING_SCRIPT_PATH}" ] \
-&& chmod +x ${JIBRI_FINALIZE_RECORDING_SCRIPT_PATH}
-
 # set rundom jibri nickname for the instance if is not set
 [ -z "${JIBRI_INSTANCE_ID}" ] \
 && export JIBRI_INSTANCE_ID=$(date +%N)
