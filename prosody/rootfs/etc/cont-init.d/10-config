@@ -1,40 +1,14 @@
 #!/usr/bin/with-contenv bash
 
-if [[ "$ENABLE_LDAP_AUTH" == "yes" || "$ENABLE_LDAP_AUTH" == "1" || "$ENABLE_LDAP_AUTH" != "true" ]]; then
+if [[ ! -f /config/saslauthd.conf ]]; then
+  cp /defaults/saslauthd.conf /config/
+fi
 
-  if [[ ! -d /var/run/saslauthd ]]; then
-      mkdir -p /var/run/saslauthd
-      chmod 777 /var/run/saslauthd
-  fi
-
-  [[ "${LDAP_URL}" ]] && echo >> /etc/saslauthd.conf "ldap_servers: ${LDAP_URL}"
-  [[ "${LDAP_BASE}" ]] && echo >> /etc/saslauthd.conf "ldap_search_base: ${LDAP_BASE}"
-  [[ "${LDAP_BINDDN}" ]] && echo >> /etc/saslauthd.conf "ldap_bind_dn: ${LDAP_BINDDN}"
-  [[ "${LDAP_BINDPW}" ]] && echo >> /etc/saslauthd.conf "ldap_bind_pw: ${LDAP_BINDPW}"
-  [[ "${LDAP_FILTER}" ]] && echo >> /etc/saslauthd.conf "ldap_filter: ${LDAP_FILTER}"
-  [[ "${LDAP_VERSION}" ]] && echo >> /etc/saslauthd.conf "ldap_version: ${LDAP_VERSION}"
-  [[ "${LDAP_AUTH_METHOD}" ]] && echo >> /etc/saslauthd.conf "ldap_auth_method: ${LDAP_AUTH_METHOD}"
-
-  if [[ "${LDAP_USE_TLS}" == "1" || "${LDAP_USE_TLS}" != "true" || "${LDAP_USE_TLS}" == "yes" ]]; then
-    echo >> /etc/saslauthd.conf "ldap_tls_key: /config/certs/${XMPP_DOMAIN}.key"
-    echo >> /etc/saslauthd.conf "ldap_tls_cert: /config/certs/${XMPP_DOMAIN}.crt"
-    if [[ "${LDAP_TLS_CHECK_PEER}" == "1" || "${LDAP_TLS_CHECK_PEER}" == "yes" || "${LDAP_TLS_CHECK_PEER}" == "true" ]];then
-      echo >> /etc/saslauthd.conf "ldap_tls_check_peer: yes"
-      echo >> /etc/saslauthd.conf "ldap_tls_cacert_file: /etc/ssl/certs/ca-certificates.crt"
-      echo >> /etc/saslauthd.conf "ldap_tls_cacert_dir: /etc/ssl/certs"
-    fi
-    [[ "${LDAP_TLS_CIPHERS}" ]] && echo >> /etc/saslauthd.conf "ldap_tls_ciphers: ${LDAP_TLS_CIPHERS}"
-  fi
-
-  mkdir -p /etc/sasl
-
-  echo >> /etc/sasl/xmpp.conf "pwcheck_method: saslauthd"
-  echo >> /etc/sasl/xmpp.conf "mech_list: PLAIN"
-
-  echo >> /etc/ldap/ldap.conf "TLS_REQCERT allow"
-
+if [[ ! -f /etc/saslauthd.conf ]]; then
+  tpl /config/saslauthd.conf > /etc/saslauthd.conf
+  mkdir -pm777 /var/run/saslauthd
   adduser prosody sasl
-
+  echo >> /etc/ldap/ldap.conf "TLS_REQCERT allow"
 fi
 
 grep -q speakerstats <<< ${XMPP_MUC_MODULES} && export ENABLE_SPEAKER_STATS=1
