@@ -86,6 +86,12 @@ if [[ ! -f /config/config.js ]]; then
              /config/config.js
     fi
 
+    if [[ $TURN_ENABLE -eq 1 || "$TURN_ENABLE" == "true" ]]; then
+        sed -i \
+             -e "s#// useStunTurn:.*,#useStunTurn: true,#" \
+             /config/config.js
+    fi
+
     if [[ $ENABLE_CHROME_SCREEN_SHARING -eq 1 ]]; then
         sed -i \
             -e "s#desktopSharingChromeDisabled:.*#desktopSharingChromeDisabled: false,#" \

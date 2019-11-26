@@ -39,6 +39,9 @@ follow these steps:
 If you want to use jigasi too, first configure your env file with SIP credentials
 and then run Docker Compose as follows: ``docker-compose -f docker-compose.yml -f jigasi.yml up -d``
 
+If you want to enable TURN server, configure it and run Docker Compose as
+follows: ``docker-compose -f docker-compose.yml -f turn.yml up``
+
 ## Architecture
 
 A Jitsi Meet installation can be broken down into the following components:
@@ -65,6 +68,7 @@ several container images are provided.
 * **jicofo**: [Jicofo], the XMPP focus component.
 * **jvb**: [Jitsi Videobridge], the video router.
 * **jigasi**: [Jigasi], the SIP (audio only) gateway.
+* **turn**: [Coturn], the TURN server.
 
 ### Design considerations
 
@@ -291,6 +295,32 @@ The brige selection stratagy is:
 
 * `RegionBasedBridgeSelectionStrategy` - matches the region of the clients to the region of the Jitsi Videobridge instances. Used by default.
 
+### TURN(S) server
+For enable turn server for P2P and JVB connections, please add to the variable `GLOBAL_MODULES` string `turncredentials` and set variables below
+
+Variable | Description | Default value
+--- | --- | ---
+`TURN_ENABLE` | Use TURN for P2P and JVB (bridge mode) connections | 0
+`TURN_REALM` | Realm to be used for the users with long-term credentials mechanism or with TURN REST API | realm
+`TURN_SECRET` | Secret for connect to TURN server | keepthissecret
+`TURN_TYPE` | Type of TURN(s) (turn/turns) | turns
+`TURN_HOST` | Annonce FQDN/IP address of the turn server via XMPP (XEP-0215) | 192.168.1.1
+`TURN_PUBLIC_IP` | Public IP address for an instance of turn server | set dynamically
+`TURN_PORT` | TLS/TCP/UDP turn port for connection | 5349
+`TURN_TRANSPORT` | transport for turn connection (tcp/udp) | tcp
+`TURN_RTP_MIN` | RTP start port for turn/turns connections | 10000
+`TURN_RTP_MAX` | RTP end port for turn/turns connections | 11000
+
+
+For enable web-admin panel for turn, please set variables below
+
+Variable | Description | Default value
+--- | --- | ---
+`TURN_ADMIN_ENABLE` | Enable web-admin panel | 0
+`TURN_ADMIN_USER` | Username for admin panel | admin
+`TURN_ADMIN_SECRET` | Password for admin panel | changeme
+`TURN_ADMIN_PORT` | HTTP(s) port for acess to admin panel | 8443
+
 ### Running on a LAN environment
 
 If running in a LAN environment (as well as on the public Internet, via NAT) is a requirement,
@@ -307,7 +337,6 @@ option.
 * Docker Swarm mode.
 * More services:
   * Jibri.
-  * TURN server.
 
 [Jitsi]: https://jitsi.org/
 [Jitsi Meet]: https://jitsi.org/jitsi-meet/
@@ -322,3 +351,4 @@ option.
 [Jigasi]: https://github.com/jitsi/jigasi
 [ICE]: https://en.wikipedia.org/wiki/Interactive_Connectivity_Establishment
 [STUN]: https://en.wikipedia.org/wiki/STUN
+[Coturn]: https://github.com/coturn/coturn
