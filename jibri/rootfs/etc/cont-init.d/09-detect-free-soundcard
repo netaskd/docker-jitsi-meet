@@ -1,0 +1,16 @@
+#!/bin/bash
+# the script for dynamic check free sound card
+# in first step we check avalable card and if it's found set alsa config
+# in the second step we allocate this card for the next checks on the host
+for i in $(seq 0 5);do # search from 5 cards
+  # try to detect free port
+  timeout 10s nice -n19 ionice -c3 aplay -q -Dhw:${i},0,3 -t raw -f S16_LE /dev/urandom &>/dev/null
+  # allocate detected port for next check and set sound card id
+  if [ "$?" != 1 ];then
+    sed -i "s/hw:Loopback/hw:${i}/g" /home/jibri/.asoundrc
+    echo -e "[cont-init.d] INFO: Sound Card \e[31m${i}\e[39m,0,3 is allocated"
+    nohup nice -n19 ionice -c3 aplay -q -Dhw:${i},0,3 -t raw -f S16_LE /dev/urandom &>/dev/null &
+    exit 0
+  fi
+done
+
