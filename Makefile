@@ -3,7 +3,7 @@ JITSI_RELEASE ?= stable
 JITSI_BUILD ?= latest
 JITSI_REPO ?= jitsi
 #JITSI_SERVICES ?= base base-java web prosody jicofo jvb jigasi jibri etherpad turn
-JITSI_SERVICES ?= base base-java web=1.0.3757-1 prosody=0.11.3-1 jicofo=1.0-497-1 jvb=1126-1 jigasi=1.1-30-gb8b1788-1 jibri=8.0-14-g0ccc3f6-1 etherpad=1.8.0 turn=4.5.1.1
+JITSI_SERVICES ?= base base-java web=1.0.3786-1 prosody=0.11.3-1 jicofo=1.0-514-1 jvb=1126-1 jigasi=1.1-30-gb8b1788-1 jibri=8.0-14-g0ccc3f6-1 etherpad=1.8.0 turn=4.5.1.1
 
 BUILD_ARGS := --build-arg JITSI_REPO=$(JITSI_REPO)
 ifeq ($(FORCE_REBUILD), 1)
