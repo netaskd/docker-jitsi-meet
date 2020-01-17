@@ -37,7 +37,7 @@ RUN \
     && dpkg -x /var/cache/apt/archives/jitsi-meet-prosody*.deb /tmp \
     && mv /tmp/usr/share/jitsi-meet/prosody-plugins /prosody-plugins \
     && apt-cleanup \
-    && rm -rf /tmp/usr /var/cache/apt
+    && rm -rf /tmp/usr /var/cache/apt /var/lib/apt/lists
 
 RUN \
     curl -4so /prosody-plugins/mod_turncredentials.lua \
