@@ -127,6 +127,7 @@ services:
             - JICOFO_AUTH_USER
             - JICOFO_AUTH_PASSWORD
             - JICOFO_BRIDGE_SELECTION_STRATEGY
+            - JICOFO_MAX_PARTICIPANTS_PER_BRIDGE
             - JVB_BREWERY_MUC
             - JIGASI_BREWERY_MUC
             - JIBRI_BREWERY_MUC
