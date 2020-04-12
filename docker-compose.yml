@@ -130,6 +130,7 @@ services:
             - JICOFO_MAX_PARTICIPANTS_PER_BRIDGE
             - JVB_BREWERY_MUC
             - JIGASI_BREWERY_MUC
+            - JIGASI_SIP_URI
             - JIBRI_BREWERY_MUC
             - JIBRI_PENDING_TIMEOUT
             - TZ
