@@ -89,6 +89,8 @@ Component "{{ .Env.XMPP_MUC_DOMAIN }}" "muc"
         "{{ join "\";\n\"" (splitList "," .Env.XMPP_MUC_MODULES) }}";
         {{ end }}
     }
+    muc_room_locking = false
+    muc_room_default_public_jids = true
 
 Component "focus.{{ .Env.XMPP_DOMAIN }}"
     component_secret = "{{ .Env.JICOFO_COMPONENT_SECRET }}"
