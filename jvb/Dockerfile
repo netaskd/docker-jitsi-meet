@@ -4,7 +4,7 @@ ARG VERSION
 
 RUN \
 	apt-dpkg-wrap apt-get update && \
-	apt-dpkg-wrap apt-get install -y jitsi-videobridge=${VERSION:-*} && \
+	apt-dpkg-wrap apt-get install -y jitsi-videobridge2=${VERSION:-*} && \
 	apt-cleanup
 
 COPY rootfs/ /
