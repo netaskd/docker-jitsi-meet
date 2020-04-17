@@ -41,8 +41,9 @@ tpl /defaults/logging.properties > /etc/jitsi/jibri/logging.properties
 
 # make recording dir
 [ -z "${JIBRI_RECORDING_DIR}" ] && export JIBRI_RECORDING_DIR=/config/recordings
-mkdir -p ${JIBRI_RECORDING_DIR}
-chown -R jibri ${JIBRI_RECORDING_DIR}
+[ ! -d ${JIBRI_RECORDING_DIR} ] \
+&& mkdir -p ${JIBRI_RECORDING_DIR} \
+&& chown -R jibri ${JIBRI_RECORDING_DIR}
 
 # make logs dir
 [ -z "${JIBRI_LOGS_DIR}" ] && export JIBRI_LOGS_DIR=/config/logs
