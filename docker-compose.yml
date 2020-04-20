@@ -83,6 +83,7 @@ services:
             - JICOFO_AUTH_PASSWORD
             - JVB_AUTH_USER
             - JVB_AUTH_PASSWORD
+            - JVB_WS_ENABLE
             - JIGASI_XMPP_USER
             - JIGASI_XMPP_PASSWORD
             - JIBRI_BREWERY_MUC
@@ -167,6 +168,11 @@ services:
             - JVB_ENABLE_APIS
             - JVB_OCTO_REGION
             - JVB_OCTO_BIND_PORT
+            - JVB_WS_ENABLE
+            - JVB_WS_PORT
+            - JVB_WS_TLS
+            - JVB_WS_SERVER_ID
+            - PUBLIC_WSS_DOMAIN
             - JICOFO_AUTH_USER
             - TZ
         networks:
