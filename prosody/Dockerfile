@@ -2,11 +2,15 @@ ARG JITSI_REPO=jitsi
 FROM ${JITSI_REPO}/base
 ARG VERSION
 
+ADD https://prosody.im/files/prosody-debian-packages.key /tmp/prosody.key
+
 RUN \
-    echo "deb http://security.debian.org/debian-security stretch/updates main" > /etc/apt/sources.list.d/stretch.list \
+    apt-key add /tmp/prosody.key \
+    && rm -f /tmp/prosody.key \
+    && echo "deb http://packages.prosody.im/debian stretch main" > /etc/apt/sources.list.d/prosody.list \
     && apt-dpkg-wrap apt-get update \
-    && apt-dpkg-wrap apt-get install -y \
-      prosody=${VERSION:-*} \
+    && apt-dpkg-wrap apt-get install -y prosody=${VERSION:-*}~stretch6 \
+    && apt-dpkg-wrap apt-get install -t stretch-backports -y \
       liblua5.2-dev \
       sasl2-bin \
       libsasl2-modules-ldap \
@@ -14,6 +18,7 @@ RUN \
       libssl1.0-dev \
       lua-basexx \
       lua-ldap \
+      lua-sec \
       luarocks \
       git \
       gcc \
@@ -29,7 +34,7 @@ RUN \
       libssl1.0-dev \
       liblua5.2-dev \
     && apt-cleanup \
-    && rm -rf /etc/prosody /var/cache/apt /etc/apt/sources.list.d/stretch.list
+    && rm -rf /etc/prosody /var/cache/apt /etc/apt/sources.list.d/prosody.list
 
 RUN \
     apt-dpkg-wrap apt-get update \
@@ -43,13 +48,11 @@ RUN \
     curl -4so /prosody-plugins/mod_turncredentials.lua \
     https://raw.githubusercontent.com/netaskd/mod_turncredentials/master/mod_turncredentials.lua
 
-RUN \
-    sed -i s/hook/hook_global/g /prosody-plugins/mod_auth_token.lua \
-    && patch -d /usr/lib/prosody/modules/muc -p0 < /prosody-plugins/muc_owner_allow_kick.patch
+RUN patch -d /usr/lib/prosody/modules/muc -p0 < /prosody-plugins/muc_owner_allow_kick.patch
 
 COPY rootfs/ /
 
 EXPOSE 5222 5269 5347 5280
 
-VOLUME ["/config", "/prosody-plugins-custom"]
+VOLUME ["/config", "/prosody-plugins"]
 
