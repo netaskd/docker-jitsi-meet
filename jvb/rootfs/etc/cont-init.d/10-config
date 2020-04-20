@@ -1,7 +1,21 @@
 #!/usr/bin/with-contenv bash
 
+if [[ -z "$PUBLIC_ADDRESS" ]]; then
+  echo >/var/run/s6/container_environment/PUBLIC_ADDRESS "$(curl -4qs --connect-timeout 15 icanhazip.com)"
+fi
+
+echo >/var/run/s6/container_environment/LOCAL_ADDRESS "$(hostname -I | cut -d " " -f1)"
+
+if [[ ! -z "${JVB_NODE_NAME}" ]];then
+    if [[ -z "${JVB_OCTO_REGION}" ]];then
+        # here we set octo region as the first three letters of the node name
+        echo >/var/run/s6/container_environment/JVB_OCTO_REGION "${JVB_NODE_NAME:0:3}"
+    fi
+fi
+
 if [[ ! -f /config/sip-communicator.properties ]]; then
-    tpl /defaults/sip-communicator.properties > /config/sip-communicator.properties
+    # generate config from env and cleanup empty lines
+    tpl /defaults/sip-communicator.properties | grep -v "^$" > /config/sip-communicator.properties
 fi
 
 if [[ ! -f /config/logging.properties ]]; then
@@ -9,4 +23,3 @@ if [[ ! -f /config/logging.properties ]]; then
 fi
 
 chown -R jvb.jitsi /config
-

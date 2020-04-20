@@ -2,32 +2,6 @@
 
 JAVA_SYS_PROPS="-Dnet.java.sip.communicator.SC_HOME_DIR_LOCATION=/ -Dnet.java.sip.communicator.SC_HOME_DIR_NAME=config -Djava.util.logging.config.file=/config/logging.properties"
 
-if [[ -z "$PUBLIC_ADDRESS" ]]; then
-  PUBLIC_ADDRESS="$(curl -4qs --connect-timeout 15 icanhazip.com)"
-fi
-
-if [[ ! -z "$PUBLIC_ADDRESS" ]]; then
-    LOCAL_ADDRESS="$(hostname -I | cut -d " " -f1)"
-    JAVA_SYS_PROPS="$JAVA_SYS_PROPS -Dorg.ice4j.ice.harvest.NAT_HARVESTER_LOCAL_ADDRESS=$LOCAL_ADDRESS -Dorg.ice4j.ice.harvest.NAT_HARVESTER_PUBLIC_ADDRESS=$PUBLIC_ADDRESS"
-
-    if [[ ! -z "${JVB_NODE_NAME}" ]];then
-        # here we set octo region as the first three letters of the node name
-        export JVB_OCTO_REGION=${JVB_NODE_NAME:0:3}
-        export JVB_WS_SERVER_ID=${JVB_NODE_NAME}
-    fi
-
-    if [[ ! -z "${JVB_OCTO_REGION}" ]];then
-        JAVA_SYS_PROPS="$JAVA_SYS_PROPS -Dorg.jitsi.videobridge.octo.BIND_ADDRESS=$LOCAL_ADDRESS -Dorg.jitsi.videobridge.REGION=$JVB_OCTO_REGION"
-    fi
-
-    if [[ "${JVB_WS_ENABLE}" == "1" || "${JVB_WS_ENABLE}" == "true" ]];then
-        JAVA_SYS_PROPS="$JAVA_SYS_PROPS -Dorg.jitsi.videobridge.rest.COLIBRI_WS_SERVER_ID=${JVB_WS_SERVER_ID}"
-    fi
-
-    grep -ioqE 'true|1' <<<${JVB_OCTO_BEHIND_NAT:-false} \
-    && JAVA_SYS_PROPS="$JAVA_SYS_PROPS -Dorg.jitsi.videobridge.octo.PUBLIC_ADDRESS=$PUBLIC_ADDRESS"
-fi
-
 DAEMON=/usr/share/jitsi-videobridge/jvb.sh
 DEFAULT_DAEMON_OPTS="none"
 
