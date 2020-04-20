@@ -2,7 +2,7 @@ admins = { "{{ .Env.JICOFO_AUTH_USER }}@{{ .Env.XMPP_AUTH_DOMAIN }}" }
 plugin_paths = { "/prosody-plugins/", "/prosody-plugins-custom" }
 http_default_host = "{{ .Env.XMPP_DOMAIN }}"
 
-{{ if .Env.XMPP_WS_ENABLE | default "0" | toBool }}
+{{ if .Env.JVB_WS_ENABLE | default "0" | toBool }}
 consider_websocket_secure = true
 cross_domain_websocket = true
 {{ end }}
@@ -38,7 +38,7 @@ VirtualHost "{{ .Env.XMPP_DOMAIN }}"
     speakerstats_component = "speakerstats.{{ .Env.XMPP_DOMAIN }}"
     {{ end }}
     modules_enabled = {
-        {{ if .Env.XMPP_WS_ENABLE | default "0" | toBool }}
+        {{ if .Env.JVB_WS_ENABLE | default "0" | toBool }}
         "websocket";
         {{ end }}
         "bosh";

@@ -235,6 +235,11 @@ Variable | Description | Default value
 `JVB_TCP_PORT` | TCP port for media used by Jitsi Videobridge when the TCP Harvester is enabled | 4443
 `JVB_BREWERY_MUC` | MUC name for the JVB pool | jvbbrewery
 `JVB_ENABLE_APIS` | Comma separated list of JVB APIs to enable | none
+`JVB_WS_ENABLE` | Use WebSockets instead of WebRTC Data Channels | 0
+`JVB_WS_PORT` | The port for WebSocket connection | 9090
+`JVB_WS_TLS` | To specify that the bridge should advertise the web socket protocol as "wss" even if it is locally using plain HTTP | true
+`JVB_WS_SERVER_ID` | To specify a specific server ID to be advertised as path of the HTTP request path | jvb2
+`PUBLIC_WSS_DOMAIN` | To specify the domain to advertise. If not set, use `LETSENCRYPT_DOMAIN` by default | wss.example.com
 `JIGASI_XMPP_USER` | XMPP user for Jigasi MUC client connections | jigasi
 `JIGASI_XMPP_PASSWORD` | XMPP password for Jigasi MUC client connections | passw0rd
 `JIGASI_BREWERY_MUC` | MUC name for the Jigasi pool | jigasibrewery
