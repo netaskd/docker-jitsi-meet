@@ -173,6 +173,7 @@ services:
             - JVB_WS_TLS
             - JVB_WS_SERVER_ID
             - PUBLIC_WSS_DOMAIN
+            - LETSENCRYPT_DOMAIN
             - JICOFO_AUTH_USER
             - TZ
         networks:
