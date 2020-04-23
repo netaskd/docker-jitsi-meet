@@ -25,7 +25,7 @@ VirtualHost "{{ .Env.XMPP_DOMAIN }}"
     cyrus_application_name = "xmpp"
     allow_unencrypted_plain_auth = true
       {{else}}
-    authentication = "internal_plain"
+    authentication = "internal_hashed"
       {{end}}
     {{ else }}
     authentication = "anonymous"
@@ -65,14 +65,14 @@ VirtualHost "{{ .Env.XMPP_AUTH_DOMAIN }}"
         key = "/config/certs/{{ .Env.XMPP_AUTH_DOMAIN }}.key";
         certificate = "/config/certs/{{ .Env.XMPP_AUTH_DOMAIN }}.crt";
     }
-    authentication = "internal_plain"
+    authentication = "internal_hashed"
 
 {{ if .Env.XMPP_RECORDER_DOMAIN }}
 VirtualHost "{{ .Env.XMPP_RECORDER_DOMAIN }}"
     modules_enabled = {
       "ping";
     }
-    authentication = "internal_plain"
+    authentication = "internal_hashed"
 {{ end }}
 
 {{ if .Env.ENABLE_SPEAKER_STATS | default "0" | toBool }}
