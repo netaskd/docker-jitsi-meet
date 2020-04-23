@@ -33,20 +33,30 @@ fi
 
 # set rundom jibri nickname for the instance if is not set
 [ -z "${JIBRI_INSTANCE_ID}" ] \
-&& export JIBRI_INSTANCE_ID=$(date +%N)
+&& echo -n >/var/run/s6/container_environment/JIBRI_INSTANCE_ID "$(date +%N)"
 
 # always recreate configs
 tpl /defaults/config.json > /etc/jitsi/jibri/config.json
 tpl /defaults/logging.properties > /etc/jitsi/jibri/logging.properties
 
-# make recording dir
-[ -z "${JIBRI_RECORDING_DIR}" ] && export JIBRI_RECORDING_DIR=/config/recordings
+# set default recording dir
+[ -z "${JIBRI_RECORDING_DIR}" ] \
+&& export JIBRI_RECORDING_DIR="/config/recordings" \
+&& echo -n >/var/run/s6/container_environment/JIBRI_RECORDING_DIR "${JIBRI_RECORDING_DIR}"
+
+# create recording dir
 [ ! -d ${JIBRI_RECORDING_DIR} ] \
 && mkdir -p ${JIBRI_RECORDING_DIR} \
-&& chown -R jibri ${JIBRI_RECORDING_DIR}
+&& chown jibri ${JIBRI_RECORDING_DIR}
 
-# make logs dir
-[ -z "${JIBRI_LOGS_DIR}" ] && export JIBRI_LOGS_DIR=/config/logs
-mkdir -p ${JIBRI_LOGS_DIR}
-chown -R jibri ${JIBRI_LOGS_DIR}
+# set default logs dir
+[ -z "${JIBRI_LOGS_DIR}" ] \
+&& export JIBRI_LOGS_DIR="/config/logs" \
+&& echo -n >/var/run/s6/container_environment/JIBRI_LOGS_DIR "${JIBRI_LOGS_DIR}"
 
+# create logs dir
+[ ! -d ${JIBRI_LOGS_DIR} ] \
+&& mkdir -p ${JIBRI_LOGS_DIR} \
+&& chown jibri ${JIBRI_LOGS_DIR}
+
+exit 0
