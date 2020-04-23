@@ -11,8 +11,6 @@ if [[ ! -f /etc/saslauthd.conf ]]; then
   echo >> /etc/ldap/ldap.conf "TLS_REQCERT allow"
 fi
 
-grep -q speakerstats <<< ${XMPP_MUC_MODULES} && export ENABLE_SPEAKER_STATS=1
-
 PROSODY_CFG="/config/prosody.cfg.lua"
 
 if [[ ! -d /config/data ]]; then

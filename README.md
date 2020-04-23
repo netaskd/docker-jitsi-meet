@@ -272,7 +272,6 @@ Variable | Description | Default value
 `START_WITH_VIDEO_MUTED` | Mute a video when user is coming to a conference | 1
 `CALENDAR_MS_APP_ID` | Enable Microsoft calendar integarion. Set Azure application ID | 00000000-0000-0000-0000-000040240063
 `ETHERPAD_URL_BASE` | Set etherpad-lite URL | http://etherpad:9001
-`ENABLE_SPEAKER_STATS` | Enable speaker statistics | 1
 
 #### Setting up Octo (cascaded bridges)
 NOTE: For get working octo properly you have to set header "X-User-Region" before it passing to nginx. It can be realized via geoip or another logic and it's not described here.

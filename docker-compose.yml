@@ -93,7 +93,6 @@ services:
             - JIBRI_RECORDER_USER
             - JIBRI_RECORDER_PASSWORD
             - ENABLE_RECORDING
-            - ENABLE_SPEAKER_STATS
             - TZ
             - TURN_ENABLE
             - TURN_SECRET
