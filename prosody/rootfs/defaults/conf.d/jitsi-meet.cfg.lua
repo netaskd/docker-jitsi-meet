@@ -5,6 +5,11 @@ http_default_host = "{{ .Env.XMPP_DOMAIN }}"
 {{ if .Env.JVB_WS_ENABLE | default "0" | toBool }}
 consider_websocket_secure = true
 cross_domain_websocket = true
+
+smacks_max_unacked_stanzas = 5;
+smacks_hibernation_time = 60;
+smacks_max_hibernated_sessions = 1;
+smacks_max_old_sessions = 1;
 {{ end }}
 
 {{ if .Env.TURN_ENABLE | default "0" | toBool }}
@@ -34,9 +39,6 @@ VirtualHost "{{ .Env.XMPP_DOMAIN }}"
         key = "/config/certs/{{ .Env.XMPP_DOMAIN }}.key";
         certificate = "/config/certs/{{ .Env.XMPP_DOMAIN }}.crt";
     }
-    {{ if .Env.ENABLE_SPEAKER_STATS | default "0" | toBool }}
-    speakerstats_component = "speakerstats.{{ .Env.XMPP_DOMAIN }}"
-    {{ end }}
     modules_enabled = {
         {{ if .Env.JVB_WS_ENABLE | default "0" | toBool }}
         "websocket";
@@ -44,6 +46,8 @@ VirtualHost "{{ .Env.XMPP_DOMAIN }}"
         "bosh";
         "pubsub";
         "ping";
+        "speakerstats";
+        "conference_duration";
         {{ if .Env.XMPP_MODULES }}
         "{{ join "\";\n\"" (splitList "," .Env.XMPP_MODULES) }}";
         {{ end }}
@@ -51,6 +55,9 @@ VirtualHost "{{ .Env.XMPP_DOMAIN }}"
         "auth_cyrus";
         {{end}}
     }
+
+    speakerstats_component = "speakerstats.{{ .Env.XMPP_DOMAIN }}"
+    conference_duration_component = "conferenceduration.{{ .Env.XMPP_DOMAIN }}"
 
     c2s_require_encryption = false
 
@@ -73,11 +80,6 @@ VirtualHost "{{ .Env.XMPP_RECORDER_DOMAIN }}"
       "ping";
     }
     authentication = "internal_hashed"
-{{ end }}
-
-{{ if .Env.ENABLE_SPEAKER_STATS | default "0" | toBool }}
-Component "speakerstats.{{ .Env.XMPP_DOMAIN }}" "speakerstats_component"
-    muc_component = "{{ .Env.XMPP_MUC_DOMAIN }}"
 {{ end }}
 
 Component "{{ .Env.XMPP_INTERNAL_MUC_DOMAIN }}" "muc"
@@ -103,3 +105,8 @@ Component "{{ .Env.XMPP_MUC_DOMAIN }}" "muc"
 Component "focus.{{ .Env.XMPP_DOMAIN }}"
     component_secret = "{{ .Env.JICOFO_COMPONENT_SECRET }}"
 
+Component "speakerstats.{{ .Env.XMPP_DOMAIN }}" "speakerstats_component"
+    muc_component = "{{ .Env.XMPP_MUC_DOMAIN }}"
+
+Component "conferenceduration.{{ .Env.XMPP_DOMAIN }}" "conference_duration_component"
+    muc_component = "{{ .Env.XMPP_MUC_DOMAIN }}"

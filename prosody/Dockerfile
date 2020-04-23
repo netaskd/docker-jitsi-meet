@@ -50,6 +50,8 @@ RUN \
 
 RUN patch -d /usr/lib/prosody/modules/muc -p0 < /prosody-plugins/muc_owner_allow_kick.patch
 
+RUN patch -d /usr/lib/prosody/modules -p0 < /prosody-plugins/mod_websocket_smacks.patch
+
 COPY rootfs/ /
 
 EXPOSE 5222 5269 5347 5280

@@ -73,6 +73,9 @@ modules_enabled = {
                 {{ if .Env.TURN_ENABLE | default "0" | toBool }}
 		"turncredentials"; -- Use XEP-0215
                 {{ end }}
+                {{ if .Env.JVB_WS_ENABLE | default "0" | toBool }}
+                "smacks";
+                {{ end }}
 };
 
 https_ports = { }
