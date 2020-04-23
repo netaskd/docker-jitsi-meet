@@ -128,12 +128,13 @@ Variable | Description | Example
 
 ### JItsi BRoadcasting Infrastructure configuration
 
-For working jibri, you need setup alsa loopback on the host:
+For working jibri, you need to setup alsa loopback on the host.
+Configure 8 capture/playback interfaces. It's enough for 4 jibri instances on one node.
 
 #### for Centos 7, module already compiled with kernel, so just run:
 ```
-# configure 5 capture/playback interfaces
-echo "options snd-aloop enable=1,1,1,1,1 index=0,1,2,3,4" > /etc/modprobe.d/asound.conf
+# configure 8 capture/playback interfaces
+echo "options snd-aloop enable=1,1,1,1,1,1,1,1 index=0,1,2,3,4,5,6,7" > /etc/modprobe.d/asound.conf
 # setup autoload the module
 echo "snd_aloop" > /etc/modules-load.d/snd_aloop.conf
 # load the module
@@ -145,10 +146,12 @@ lsmod | grep snd_aloop
 ```
 # install the module
 apt update && apt install linux-image-extra-virtual
-# configure 5 capture/playback interfaces
-echo "options snd-aloop enable=1,1,1,1,1 index=0,1,2,3,4" > /etc/modprobe.d/asound.conf
+# configure 8 capture/playback interfaces
+echo "options snd-aloop enable=1,1,1,1,1,1,1,1 index=0,1,2,3,4,5,6,7" > /etc/modprobe.d/asound.conf
 # setup autoload the module
 echo "snd-aloop" >> /etc/modules
+# load the module
+modprobe snd-aloop
 # check that the module is loaded
 lsmod | grep snd_aloop
 ```

@@ -2,15 +2,21 @@
 # the script for dynamic check free sound card
 # in first step we check avalable card and if it's found set alsa config
 # in the second step we allocate this card for the next checks on the host
-for i in $(seq 0 5);do # search from 5 cards
+for i in $(seq 0 2 6);do # we need 2 cards for each instance. We suppose here total 4 instances.
   # try to detect free port
-  timeout 10s nice -n19 ionice -c3 aplay -q -Dhw:${i},0,3 -t raw -f S16_LE /dev/urandom &>/dev/null
+  timeout 3s nice -n19 ionice -c3 aplay -q -Dhw:${i},0,3 -t raw -f S16_LE /dev/urandom &>/dev/null
   # allocate detected port for next check and set sound card id
   if [ "$?" != 1 ];then
-    sed -i "s/hw:Loopback/hw:${i}/g" /home/jibri/.asoundrc
-    echo -e "[cont-init.d] INFO: Sound Card \e[31m${i}\e[39m,0,3 is allocated"
+    # seding for use one card but multiple sub channels. Mapping:
+    # hw:Loopback,0,0 -> hw:0,0,0
+    # hw:Loopback,1,0 -> hw:0,1,0
+    # hw:Loopback_1,0,0 -> hw:1,0,0
+    # hw:Loopback_1,1,0 -> hw:1,1,0
+    sed -i "s/hw:Loopback_1/hw:$((i+1))/g" /home/jibri/.asoundrc # i+1 is odd-numbered
+    sed -i "s/hw:Loopback/hw:${i}/g" /home/jibri/.asoundrc # i is even-numbered
+    # set i as permanent usage for the instance
     nohup nice -n19 ionice -c3 aplay -q -Dhw:${i},0,3 -t raw -f S16_LE /dev/urandom &>/dev/null &
+    echo -e "[cont-init.d] INFO: Sound Card \e[31m${i}\e[39m,0,3 is allocated"
     exit 0
   fi
 done
-
