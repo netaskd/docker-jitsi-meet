@@ -33,7 +33,11 @@ VirtualHost "{{ .Env.XMPP_DOMAIN }}"
     authentication = "internal_hashed"
       {{end}}
     {{ else }}
-    authentication = "anonymous"
+    -- https://github.com/jitsi/docker-jitsi-meet/pull/502#issuecomment-619146339
+    authentication = "token"
+    app_id = ""
+    app_secret = ""
+    allow_empty_token = true
     {{ end }}
     ssl = {
         key = "/config/certs/{{ .Env.XMPP_DOMAIN }}.key";
@@ -63,7 +67,12 @@ VirtualHost "{{ .Env.XMPP_DOMAIN }}"
 
 {{ if and (.Env.ENABLE_AUTH | default "0" | toBool) (.Env.ENABLE_GUESTS | default "0" | toBool) }}
 VirtualHost "{{ .Env.XMPP_GUEST_DOMAIN }}"
-    authentication = "anonymous"
+    -- https://github.com/jitsi/docker-jitsi-meet/pull/502#issuecomment-619146339
+    authentication = "token"
+    app_id = ""
+    app_secret = ""
+    allow_empty_token = true
+
     c2s_require_encryption = false
 {{ end }}
 
