@@ -10,3 +10,5 @@ fi
 
 mkdir -pm777 /tmp/transcripts
 chown -R jigasi.jitsi /tmp/transcripts /config
+
+exit 0
