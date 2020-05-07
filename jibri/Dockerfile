@@ -38,9 +38,8 @@ RUN \
 	&& chromedriver --version
 
 RUN \
-        echo "deb https://download.jitsi.org unstable/" > /etc/apt/sources.list.d/jitsi.list \
-        && apt-dpkg-wrap apt-get update \
-        && apt-dpkg-wrap apt-get install -y jitsi-upload-integrations \
+        apt-dpkg-wrap apt-get update \
+        && apt-dpkg-wrap apt-get install -y jitsi-upload-integrations jq \
         && apt-cleanup
 
 COPY rootfs/ /
