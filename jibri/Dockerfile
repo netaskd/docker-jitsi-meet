@@ -39,7 +39,7 @@ RUN \
 
 RUN \
         apt-dpkg-wrap apt-get update \
-        && apt-dpkg-wrap apt-get install -y jitsi-upload-integrations jq \
+        && apt-dpkg-wrap apt-get install -y jitsi-upload-integrations libgl1-mesa-dri jq \
         && apt-cleanup
 
 COPY rootfs/ /
