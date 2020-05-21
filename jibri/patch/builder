@@ -1,0 +1,74 @@
+#!/bin/bash
+
+REPO="https://github.com/jitsi/jibri.git"
+
+# go to jibri source
+cd ${PWD}/patch
+echo "=== Current pwd is ${PWD}"
+
+# check build
+[ -f ${PWD}/jibri/deb/jibri_${VERSION}_all.deb ] \
+&& echo "=== We already have this build ${PWD}/deb/jibri_${VERSION}_all.deb" \
+&& exit 0
+
+# get the latest release
+[ -d ${PWD}/jibri ] && sudo rm -rf ${PWD}/jibri
+git clone ${REPO}
+cd ${PWD}/jibri
+echo "=== Current pwd is ${PWD}"
+
+# get the commit from version string like 8.0-30-g73de52d-1
+COMMIT="$(echo ${VERSION}|awk -F\- '{print $3}'|sed 's/^g//')"
+
+echo "=== go to commit ${COMMIT}"
+git reset --hard ${COMMIT}
+
+echo "=== apply pr277"
+wget -qO ${PWD}/pr277.patch https://github.com/jitsi/jibri/commit/dcd2cee2d51ffd9e4737f79fa79fa9fe3aa422ff.patch \
+&& git apply pr277.patch
+
+echo "== change resolution from 720p to 1080p"
+sed -i 's/1280x720/1920x1080/' src/main/kotlin/org/jitsi/jibri/capture/ffmpeg/FfmpegCapturer.kt \
+&& sed -i 's/Virtual 1280 720/Virtual 1920 1080/' resources/debian-package/etc/jitsi/jibri/xorg-video-dummy.conf \
+
+echo "== change rate-factor to 22"
+sed -i 's/h264ConstantRateFactor: Int = 25/h264ConstantRateFactor: Int = 22/' src/main/kotlin/org/jitsi/jibri/capture/ffmpeg/FfmpegCapturer.kt
+
+echo "== we have changes in"
+git diff
+
+echo "=== Current pwd is ${PWD}"
+# jibri dir inside
+APP=/deb/jibri
+
+# create build shell
+mkdir -p deb \
+&& echo -en '#!/bin/bash
+apt update \
+&& apt install -y git devscripts vim libxml2-utils
+
+# comment out git push
+sed -i "s/^git push/#git push/" ${APP}/resources/jenkins/release.sh
+
+# build
+cd ${APP} \
+&& resources/jenkins/build.sh \
+&& resources/jenkins/release.sh Minor \
+; read -p "=== Press any key for exit from the build container..." go
+#&& rm -rf ${APP} $0
+' \
+> deb/build.sh && chmod +x deb/build.sh 
+
+# docker builder
+#IMAGE=maven:3-jdk-8-slim
+IMAGE=maven:3-jdk-8-slim-local
+docker run --rm -it \
+	-v ${PWD}:${APP} \
+        -v ${PWD}/deb:/deb \
+        -e WORKSPACE=${APP} \
+        -e BUILD_NUMBER=${ALSA_CARD} \
+        -e APP=${APP} \
+        -e ALSA_CARD=${ALSA_CARD} \
+        ${IMAGE} /deb/build.sh
+
+echo "done"
