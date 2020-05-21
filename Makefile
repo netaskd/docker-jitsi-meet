@@ -1,5 +1,6 @@
 # make sure that .make-env exisis
 include .make-env
+#include .make-env-dev
 export
 
 BUILD_ARGS := --build-arg JITSI_REPO=$(JITSI_REPO)

@@ -1,0 +1,97 @@
+#!/bin/bash
+
+VERSION=${JITSI_SERVICE:4}
+BUILD=${VERSION:4:4}
+BRANCH="${BUILD}_patch"
+WEB_PATCH_REPO="${WEB_PATCH_REPO:-git@github.com:netaskd/jitsi-meet.git}"
+
+echo "== Build: ${BUILD}, Version: ${VERSION}, Repository: ${WEB_PATCH_REPO}"
+
+preinit() {
+  # do not build if deb with the version already exists
+  [ -f ${PWD}/patch/build/jitsi-meet-web_${VERSION}_all.deb ] \
+  && echo "I see deb file with version ${VERSION} already exists" \
+  && exit 0
+
+  # copy ssh keys for get access to private git repo later
+  mkdir -p ./ssh-tmp
+  cp ${HOME}/.ssh/config ${HOME}/.ssh/*deploy* ${PWD}/ssh-tmp/
+
+}
+
+containerize() {
+  echo "== Make a builder container"
+  docker build -t docker-deb-builder:buster-slim . -f-<<EOF
+  FROM node:10.20.1-buster-slim
+  RUN set -ex \
+    && sed -i 's#deb.debian.org#ftp.ru.debian.org#g' /etc/apt/sources.list \
+    && apt-get update \
+    && apt-get install -y --no-install-recommends \
+               build-essential \
+               debhelper \
+               devscripts \
+               cdbs \
+               fakeroot \
+               git \
+               openssh-client \
+               curl \
+               sudo \
+    && apt-get clean \
+    && rm -rf /tmp/* /var/tmp/* \
+    && ln -sf /usr/local/bin/node /usr/bin/node \
+    && sudo npm i -g webpack webpack-cli
+  COPY ./ssh-tmp/* /home/node/.ssh/
+  RUN set -ex \
+    && chown -R node /home/node/.ssh \
+    && chmod 600 /home/node/.ssh/*
+  USER node
+  ENTRYPOINT /builder insider
+EOF
+}
+
+builder() {
+  echo "== Create build directory"
+  mkdir -p ${PWD}/patch/build \
+  && chmod 777 ${PWD}/patch/build
+
+  echo "== Run a builder container"
+  docker run --rm -it \
+    -e JITSI_SERVICE=${JITSI_SERVICE} \
+    -e WEB_PATCH_REPO=${WEB_PATCH_REPO} \
+    -v ${PWD}/patch/builder:/builder \
+    -v ${PWD}/patch/build:/build \
+    -v ${PWD}/patch:/patch \
+    -v ~/.ssh:/home/node/ssh-tmp:ro \
+    docker-deb-builder:buster-slim \
+    && rm -rf ${PWD}/ssh-tmp
+}
+
+insider() {
+  echo "== We are inside build container $HOSTNAME"
+  echo "== Retreive copy of the source code from ${WEB_PATCH_REPO} ${BRANCH}"
+  git clone -b ${BRANCH} --depth 2 ${WEB_PATCH_REPO} /tmp/source || exit 1
+  cd /tmp/source
+  git log --max-count=2 --pretty
+  echo "========================"
+  echo "== Build user is $(whoami)"
+  echo "== Install modules and build deb"
+  npm update \
+    && make \
+    && debuild -b -uc -us \
+    && mkdir -p /build \
+    && rm -rf /build/jitsi-meet-web_*_all.deb \
+    && mv --force ../jitsi-meet-web_1.0.1-1_all.deb /build/jitsi-meet-web_${VERSION}_all.deb \
+    && mv --force ../jitsi-meet-web-config_1.0.1-1_all.deb /build/jitsi-meet-web-config_${VERSION}_all.deb \
+    && echo "== jitsi-meet-web and jitsi-meet-web-config in ./web/patch/build directory. Enjoy!" \
+    && exit 0
+}
+
+cleaner() {
+  rm -rf ${PWD}/build
+}
+
+case $1 in
+  insider) insider;;
+  *) preinit ; containerize && builder && cleaner;;
+esac
+

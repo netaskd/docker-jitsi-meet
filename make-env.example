@@ -2,5 +2,7 @@ FORCE_REBUILD=0
 JITSI_RELEASE=stable
 JITSI_BUILD=latest
 JITSI_REPO=jitsi
-#JITSI_SERVICES=base base-java web prosody jicofo jvb jigasi jibri etherpad turn
-JITSI_SERVICES=base base-java web=1.0.4048-1 prosody=0.11.5-1 jicofo=1.0-561-1 jvb=2.1-192-g06b3dfe5-1 jigasi=1.1-101-g3b2a0e5-1 jibri=8.0-27-gb7ff90c-1 etherpad=1.8.0 etherdraw=1.0 turn=4.5.1.1
+# custom repo for apply patches for jitsi-meet
+WEB_PATCH_REPO=git@github.com:netaskd/jitsi-meet.git
+# versions
+JITSI_SERVICES=base base-java web=1.0.4137-1 prosody=0.11.5-1 jicofo=1.0-589-1 jvb=2.1-202-g5f9377b9-1 jigasi=1.1-109-gb755432-1 jibri=8.0-30-g73de52d-1 etherpad=1.8.0 etherdraw=1.0 turn=4.5.1.1
