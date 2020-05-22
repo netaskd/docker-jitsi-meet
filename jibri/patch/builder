@@ -65,7 +65,7 @@ cd ${APP} \
 (while [ ! -f ${PWD}/docker_commit_flag ];do
       sleep 2
 done
-docker commit jitsi-builder maven:3-jdk-8-slim-local \
+docker commit jibri-builder maven:3-jdk-8-slim-local \
 && rm -f ${PWD}/docker_commit_flag
 ) &
 
@@ -75,7 +75,7 @@ if [ "$(docker images| grep 3-jdk-8-slim-local)" != "" ];then
   IMAGE=maven:3-jdk-8-slim-local
 fi
 docker run --rm -it \
-	--name=jitsi-builder \
+	--name=jibri-builder \
 	-v ${PWD}:${APP} \
         -v ${PWD}/deb:/deb \
         -e WORKSPACE=${APP} \
