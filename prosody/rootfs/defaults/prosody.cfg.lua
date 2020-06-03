@@ -70,12 +70,6 @@ modules_enabled = {
 		--"watchregistrations"; -- Alert admins of registrations
 		--"motd"; -- Send a message to users when they log in
 		--"legacyauth"; -- Legacy authentication. Only used by some old clients and bots.
-                {{ if .Env.TURN_ENABLE | default "0" | toBool }}
-		"turncredentials"; -- Use XEP-0215
-                {{ end }}
-                {{ if .Env.JVB_WS_ENABLE | default "0" | toBool }}
-                "smacks"; -- XEP-0198: Stream Management
-                {{ end }}
 };
 
 https_ports = { }
@@ -149,7 +143,7 @@ authentication = "internal_hashed"
 --  Logs info and higher to /var/log
 --  Logs errors to syslog also
 log = {
-	{ levels = {min = "info"}, to = "console"};
+	{ levels = {min = "{{ .Env.XMPP_LOG_LEVEL | default "info" }}"}, to = "console"};
 }
 
 component_interface = { "*" }
