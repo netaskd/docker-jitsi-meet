@@ -2,8 +2,8 @@ ARG JITSI_REPO=jitsi
 FROM ${JITSI_REPO}/base-java
 
 # list of versions http://mirror.cs.uchicago.edu/google-chrome/pool/main/g/google-chrome-stable
-ARG CHROME_RELEASE=81.0.4044.129
-ARG CHROMEDRIVER_MAJOR_RELEASE=81
+ARG CHROME_RELEASE=83.0.4103.61
+ARG CHROMEDRIVER_MAJOR_RELEASE=83
 
 RUN \
 	[ "${CHROME_RELEASE}" = "latest" ] \
@@ -36,7 +36,7 @@ RUN \
         && apt-dpkg-wrap apt-get install -y libgl1-mesa-dri jitsi-upload-integrations \
         && apt-cleanup
 
-COPY patch/jibri/deb/jibri_${VERSION:-*}_all.deb /patch/deb/
+COPY patch/build/jibri_${VERSION:-*}_all.deb /patch/deb/
 
 ARG VERSION
 
