@@ -56,9 +56,10 @@ services:
         volumes:
             - ${CONFIG}/prosody:/config
         environment:
+            - AUTH_TYPE
             - ENABLE_AUTH
             - ENABLE_GUESTS
-            - ENABLE_LDAP_AUTH
+            - ENABLE_LOBBY
             - LDAP_URL
             - LDAP_BASE
             - LDAP_BINDDN
