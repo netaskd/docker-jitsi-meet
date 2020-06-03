@@ -27,6 +27,7 @@ containerize() {
     && sed -i 's#deb.debian.org#ftp.ru.debian.org#g' /etc/apt/sources.list \
     && apt-get update \
     && apt-get install -y --no-install-recommends \
+               nodejs \
                build-essential \
                debhelper \
                devscripts \
@@ -94,4 +95,3 @@ case $1 in
   insider) insider;;
   *) preinit ; containerize && builder && cleaner;;
 esac
-
