@@ -1,2 +1,13 @@
 *.swp
+.vscode
+# Envs
 .env
+.make-env
+.make-env-prod
+.make-env-dev
+# builds
+web/patch/build
+jibri/patch/build
+# WIP
+streamer
+webstream
