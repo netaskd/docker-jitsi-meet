@@ -1,4 +1,17 @@
 ARG JITSI_REPO=jitsi
+
+FROM ${JITSI_REPO}/base as pjsua-builder
+
+RUN apt-dpkg-wrap apt-get update \
+  && apt-dpkg-wrap apt-get install -y git build-essential libv4l-dev libsdl2-dev \
+    libavcodec-dev libavdevice-dev libavfilter-dev libavformat-dev libavresample-dev \
+    libavutil-dev libswresample-dev libswscale-dev libasound2-dev libopus-dev libvpx-dev \
+  && git clone -b jibri-2.10-dev1 https://github.com/jitsi/pjproject \
+  && cd pjproject \
+  && ./configure \
+  && make dep \
+  && make 
+
 FROM ${JITSI_REPO}/base-java
 
 # list of versions http://mirror.cs.uchicago.edu/google-chrome/pool/main/g/google-chrome-stable
@@ -33,8 +46,11 @@ RUN \
 
 RUN \
         apt-dpkg-wrap apt-get update \
-        && apt-dpkg-wrap apt-get install -y libgl1-mesa-dri jitsi-upload-integrations \
+        && apt-dpkg-wrap apt-get install -y libv4l-0 libgl1-mesa-dri jitsi-upload-integrations \
         && apt-cleanup
+
+# PJSUA binary
+COPY --from=pjsua-builder /pjproject/pjsip-apps/bin/pjsua-x86_64-unknown-linux-gnu /usr/local/bin/pjsua
 
 COPY patch/build/jibri_${VERSION:-*}_all.deb /patch/deb/
 
