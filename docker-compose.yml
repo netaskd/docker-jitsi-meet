@@ -59,7 +59,6 @@ services:
             - AUTH_TYPE
             - ENABLE_AUTH
             - ENABLE_GUESTS
-            - ENABLE_LOBBY
             - LDAP_URL
             - LDAP_BASE
             - LDAP_BINDDN

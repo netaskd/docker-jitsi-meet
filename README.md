@@ -123,10 +123,6 @@ Variable | Description | Default value
 --- | --- | ---
 `JVB_WS_ENABLE` | Enable WebSockets for XMPP (prosody) and JVB connections | 0
 
-#### Lobby rooms (WIP)
-
-It's pre-configured for using lobby rooms. We are waiting for merge https://github.com/jitsi/jitsi-meet/pull/6586
-
 ## TODO
 
 * Spot

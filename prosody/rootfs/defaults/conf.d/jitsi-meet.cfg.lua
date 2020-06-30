@@ -15,7 +15,6 @@ ssl = {
 {{ $JWT_TOKEN_AUTH_MODULE := .Env.JWT_TOKEN_AUTH_MODULE | default "token_verification" }}
 {{ $JVB_WS_ENABLE := .Env.JVB_WS_ENABLE | default "0" | toBool }}
 {{ $TURN_ENABLE := .Env.TURN_ENABLE | default "0" | toBool }}
-{{ $ENABLE_LOBBY := .Env.ENABLE_LOBBY | default "0" | toBool }}
 
 {{ if and $ENABLE_AUTH (eq $AUTH_TYPE "jwt") .Env.JWT_ACCEPTED_ISSUERS }}
 asap_accepted_issuers = { "{{ join "\",\"" (splitList "," .Env.JWT_ACCEPTED_ISSUERS) }}" };
@@ -77,18 +76,16 @@ VirtualHost "{{ .Env.XMPP_DOMAIN }}"
     modules_enabled = {
         "bosh";
         "ping";
-        {{ if .Env.TURN_ENABLE | default "0" | toBool }}
+        {{ if $TURN_ENABLE }}
         "turncredentials"; -- Use XEP-0215
-        {{ end }}
-        {{ if .Env.JVB_WS_ENABLE | default "0" | toBool }}
-        "smacks"; -- XEP-0198: Stream Management
         {{ end }}
         {{ if $JVB_WS_ENABLE }}
         "websocket";
+        "smacks"; -- XEP-0198: Stream Management
         {{ end }}
         "speakerstats";
         "conference_duration";
-        {{ if $ENABLE_LOBBY }}
+        {{ if not $ENABLE_GUESTS }}
         "muc_lobby_rooms";
         {{ end }}
         {{ if .Env.XMPP_MODULES }}
@@ -98,7 +95,7 @@ VirtualHost "{{ .Env.XMPP_DOMAIN }}"
         "auth_cyrus";
         {{end}}
     }
-    {{ if $ENABLE_LOBBY }}
+    {{ if not $ENABLE_GUESTS }}
     lobby_muc = "lobby.{{ .Env.XMPP_DOMAIN }}";
     main_muc = "{{ .Env.XMPP_MUC_DOMAIN }}";
     muc_lobby_whitelist = { "{{ .Env.XMPP_RECORDER_DOMAIN }}" };
@@ -116,29 +113,24 @@ VirtualHost "{{ .Env.XMPP_GUEST_DOMAIN }}"
     {{ else }}
     authentication = "anonymous";
     {{ end }}
-
     speakerstats_component = "speakerstats.{{ .Env.XMPP_DOMAIN }}";
     conference_duration_component = "conferenceduration.{{ .Env.XMPP_DOMAIN }}";
     modules_enabled = {
-        {{ if .Env.TURN_ENABLE | default "0" | toBool }}
+        {{ if $TURN_ENABLE }}
         "turncredentials"; -- Use XEP-0215
         {{ end }}
-        {{ if .Env.JVB_WS_ENABLE | default "0" | toBool }}
+        {{ if $JVB_WS_ENABLE }}
+        "websocket";
         "smacks"; -- XEP-0198: Stream Management
         {{ end }}
         "speakerstats";
         "conference_duration";
-        {{ if $ENABLE_LOBBY }}
         "muc_lobby_rooms";
-        {{ end }}
     }
-    {{ if $ENABLE_LOBBY }}
     lobby_muc = "lobby.{{ .Env.XMPP_DOMAIN }}";
     main_muc = "{{ .Env.XMPP_MUC_DOMAIN }}";
     muc_lobby_whitelist = { "{{ .Env.XMPP_RECORDER_DOMAIN }}" };
-    {{ end }}
     c2s_require_encryption = false;
-
 {{ end }}
 
 {{ if .Env.XMPP_RECORDER_DOMAIN }}
@@ -199,10 +191,8 @@ Component "speakerstats.{{ .Env.XMPP_DOMAIN }}" "speakerstats_component"
 Component "conferenceduration.{{ .Env.XMPP_DOMAIN }}" "conference_duration_component"
     muc_component = "{{ .Env.XMPP_MUC_DOMAIN }}";
 
-{{ if $ENABLE_LOBBY }}
 Component "lobby.{{ .Env.XMPP_DOMAIN }}" "muc"
     storage = "memory";
     restrict_room_creation = true;
     muc_room_locking = false;
     muc_room_default_public_jids = true;
-{{ end }}
