@@ -14,7 +14,7 @@ all:	build-all
 release: tag-all push-all
 
 build:  versioning
-	$(MAKE) BUILD_ARGS="$(BUILD_ARGS) --build-arg VERSION=$(VERSION)" JITSI_RELEASE="$(JITSI_RELEASE)" -C $(SERVICE) build
+	$(MAKE) BUILD_ARGS="$(BUILD_ARGS) --build-arg VERSION=$(VERSION)" -C $(SERVICE) build
 
 tag:	versioning
 	docker tag $(JITSI_REPO)/$(SERVICE):latest $(JITSI_REPO)/$(SERVICE):$(or $(VERSION),$(JITSI_BUILD))
