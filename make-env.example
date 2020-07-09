@@ -5,4 +5,4 @@ JITSI_REPO=jitsi
 # custom repo for apply patches for jitsi-meet
 WEB_PATCH_REPO=git@github.com:netaskd/jitsi-meet.git
 # versions
-JITSI_SERVICES=base base-java web=1.0.4137-1 prosody=0.11.5-1 jicofo=1.0-589-1 jvb=2.1-202-g5f9377b9-1 jigasi=1.1-109-gb755432-1 jibri=8.0-30-g73de52d-1 etherpad=1.8.0 etherdraw=1.0 turn=4.5.1.1
+JITSI_SERVICES=base base-java web=1.0.4263-1 prosody=0.11.5-1 jicofo=1.0-611-1 jvb=2.1-269-gf7cb00bf-1 jigasi=1.1-126-g6df3db2-1 jibri=8.0-40-g2361c90-1 etherpad=1.8.0 etherdraw=1.1 turn=4.5.1.3
