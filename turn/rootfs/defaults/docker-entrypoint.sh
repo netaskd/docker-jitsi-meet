@@ -14,12 +14,16 @@ fi
 # set coturn web-admin access
 if [[ "${TURN_ADMIN_ENABLE}" == "1" || "${TURN_ADMIN_ENABLE}" == "true" ]]; then
   turnadmin -A -u ${TURN_ADMIN_USER:-admin} -p ${TURN_ADMIN_SECRET:-changeme}
-  export TURN_ADMIN_OPTIONS="--web-admin --web-admin-ip=$(hostname -i) --web-admin-port=${TURN_ADMIN_PORT:-8443}"
+  export TURN_ADMIN_OPTIONS="--web-admin --web-admin-listen-on-workers --web-admin-ip=$(hostname -i) --web-admin-port=${TURN_ADMIN_PORT:-8443}"
+fi
+
+if [[ "${TURN_DEBUG_ENABLE}" == "1" || "${TURN_DEBUG_ENABLE}" == "true" ]]; then
+  DEBUG="--Verbose"
 fi
 
 # run coturn server with API auth method enabled.
 turnserver -n ${TURN_ADMIN_OPTIONS} \
---verbose \
+${DEBUG:---verbose} \
 --prod \
 --no-tlsv1 \
 --no-tlsv1_1 \
