@@ -76,13 +76,6 @@ VirtualHost "{{ .Env.XMPP_DOMAIN }}"
     modules_enabled = {
         "bosh";
         "ping";
-        {{ if $TURN_ENABLE }}
-        "turncredentials"; -- Use XEP-0215
-        {{ end }}
-        {{ if $JVB_WS_ENABLE }}
-        "websocket";
-        "smacks"; -- XEP-0198: Stream Management
-        {{ end }}
         "speakerstats";
         "conference_duration";
         {{ if not $ENABLE_GUESTS }}
@@ -116,13 +109,6 @@ VirtualHost "{{ .Env.XMPP_GUEST_DOMAIN }}"
     speakerstats_component = "speakerstats.{{ .Env.XMPP_DOMAIN }}";
     conference_duration_component = "conferenceduration.{{ .Env.XMPP_DOMAIN }}";
     modules_enabled = {
-        {{ if $TURN_ENABLE }}
-        "turncredentials"; -- Use XEP-0215
-        {{ end }}
-        {{ if $JVB_WS_ENABLE }}
-        "websocket";
-        "smacks"; -- XEP-0198: Stream Management
-        {{ end }}
         "speakerstats";
         "conference_duration";
         "muc_lobby_rooms";
