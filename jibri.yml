@@ -12,6 +12,14 @@ services:
             - NET_BIND_SERVICE
         devices:
             - /dev/snd:/dev/snd
+            - /dev/video10:/dev/video10
+            - /dev/video11:/dev/video11
+            - /dev/video12:/dev/video12
+            - /dev/video13:/dev/video13
+            - /dev/video14:/dev/video14
+            - /dev/video15:/dev/video15
+            - /dev/video16:/dev/video16
+            - /dev/video17:/dev/video17            
         environment:
             - DOCKER_HOST_ADDRESS
             - XMPP_AUTH_DOMAIN
@@ -31,6 +39,13 @@ services:
             - JIBRI_LOGS_DIR
             - JIBRI_EXTERNAL_INSTANCE
             - DISPLAY=:0
+            - JIBRI_SIP_BREWERY_MUC
+            - JIBRI_SIP_USERNAME
+            - JIBRI_SIP_PASSWORD
+            - JIBRI_SIP_REALM
+            - JIBRI_SIP_RTP_PORT_MIN
+            - JIBRI_SIP_TRANSPORT
+            - JIBRI_SIP_ENABLE_SRTP
             - TZ
         networks:
             meet.jitsi:

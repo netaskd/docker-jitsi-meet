@@ -1,0 +1,5 @@
+#!/usr/bin/with-contenv bash
+
+DAEMON="/usr/bin/icewm-session --notray --display=:1"
+exec s6-setuidgid jibri /bin/bash -c "DISPLAY=:1 exec $DAEMON"
+

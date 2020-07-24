@@ -30,9 +30,9 @@ Variable | Description | Example
 
 For set `GOOGLE_APPLICATION_CREDENTIALS` please read https://cloud.google.com/text-to-speech/docs/quickstart-protocol section "Before you begin" from 1 to 5 paragraph
 
-#### JItsi BRoadcasting Infrastructure configuration
+#### JItsi BRoadcasting Infrastructure configuration Recorders
 
-For working jibri after commit jibri@5a71969 and jibri@600d4fe, you need to configure 8 capture/playback interfaces It's enough for 4 jibri instances on one node.
+For working jibri after commit jibri@5a71969 and jibri@600d4fe, you need to configure 8 capture/playback interfaces It's enough for 4 jibri instances on one node. All commands need to do on a `HOST` machine (not in container).
 
 for Centos 7, module already compiled with kernel, so just run:
 ```
@@ -58,6 +58,55 @@ modprobe snd-aloop
 # check that the module is loaded
 lsmod | grep snd_aloop
 ```
+
+#### JItsi BRoadcasting Infrastructure configuration SIP gateways
+
+Before you start please make sure that you have working JWT tokens for jibri-meet,
+or apply this dirty hack to jitsi-meet repo (rebuild needed) for using `peopleSearchUrl` with LDAP auth:
+
+```
+sed -i 's/!isGuest(state)/isLocalParticipantModerator(state)/' jitsi-meet/react/features/invite/functions.js
+```
+
+Also, this repo contains scripts with dirty hacks (around `callLogin`/`callLoginParams`) of JiBRI files for working JiBRI in kinda dual-mode Recorder/SIPgw on the same instance.
+
+Anyway, the instance can handle only one mode at the same time, but in free state, the instance ready to run any of two mode.
+
+For more details about changes please see `jibri/mod/Dockerfile` and `jibri/rootfs/defaults/google-chrome.replace` and another files ;)
+
+By default, this `mod` enabled in `jibri/Makefile`.
+
+It depends on 8 capture/playback interfaces, described above.
+
+For working with PJSUA video in Jibri on `Centos 7` please follow this instruction. All commands need to do on a `HOST` machine (not in container).
+```
+# install v4l2loopback module
+git clone https://github.com/umlaeute/v4l2loopback.git
+cd v4l2loopback
+yum install -y gcc kernel-devel-$(uname -r)
+make && make install && depmod -a
+# configure 8 video interfaces. It's enough for 4 Jibri SIPgw instances
+echo "options v4l2loopback devices=8 video_nr=10,11,12,13,14,15,16,17 exclusive_caps=1,1,1,1,1,1,1,1" > /etc/modprobe.d/v4l2loopback.conf
+# setup autoload the module
+echo "v4l2loopback" > /etc/modules-load.d/v4l2loopback.conf
+# load the module
+modprobe v4l2loopback
+# check that the module is loaded
+lsmod | grep v4l2loopback
+ls /dev/video[1][0-7]
+```
+
+For enable SIP Video Gateway in JIBRI, these options are required:
+
+Variable | Description | Default value
+--- | --- | ---
+`JIBRI_SIP_BREWERY_MUC` | MUC name for the SIP Jibri pool | sipjibribrewery
+`JIBRI_SIP_USERNAME` | SIP username | 1234
+`JIBRI_SIP_PASSWORD` | SIP password | Passw0rd
+`JIBRI_SIP_REALM` | SIP realm/domain | sip.domain.com
+`JIBRI_SIP_PORT_MIN` | Initial UDP port for RTP | 19900
+`JIBRI_SIP_TRANSPORT` | Transport for SIP connections | TLS
+`JIBRI_SIP_ENABLE_SRTP` | Enable SRTP for media | 1
 
 #### Setting up Octo (cascaded bridges)
 NOTE: For get working octo properly you have to set header "X-User-Region" before it passing to nginx. It can be realized via geoip or another logic and it's not described here.

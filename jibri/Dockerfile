@@ -2,8 +2,8 @@ ARG JITSI_REPO=jitsi
 FROM ${JITSI_REPO}/base-java
 
 # list of versions http://mirror.cs.uchicago.edu/google-chrome/pool/main/g/google-chrome-stable
-ARG CHROME_RELEASE=81.0.4044.113
-ARG CHROMEDRIVER_MAJOR_RELEASE=81
+ARG CHROME_RELEASE=84.0.4147.89
+ARG CHROMEDRIVER_MAJOR_RELEASE=84
 ARG VERSION
 
 RUN \

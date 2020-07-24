@@ -1,0 +1,5 @@
+#!/usr/bin/with-contenv bash
+
+DAEMON="/usr/bin/Xorg -nolisten unix -nocursor -noreset +extension RANDR +extension RENDER -logfile /tmp/xorg0.log -config /etc/jitsi/jibri/xorg-display0.conf :0"
+exec s6-setuidgid jibri /bin/bash -c "exec $DAEMON"
+

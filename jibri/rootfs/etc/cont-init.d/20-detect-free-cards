@@ -17,6 +17,10 @@ for i in $(seq 0 2 6);do # we need 2 cards for each instance. We suppose here to
     # set i as permanent usage for the instance
     nohup nice -n19 ionice -c3 aplay -q -Dhw:${i},0,3 -t raw -f S16_LE /dev/urandom &>/dev/null &
     echo -e "[cont-init.d] INFO: Sound Card \e[31m${i}\e[39m,0,3 is allocated"
+    # make a links to video cards
+    ln -sf /dev/video1${i} /dev/video0
+    ln -sf /dev/video1$((i+1)) /dev/video1
+    echo -e "[cont-init.d] INFO: Video Cards /dev/video\e[31m1${i}\e[39m and /dev/video\e[31m1$((i+1))\e[39m is allocated"
     exit 0
   fi
 done

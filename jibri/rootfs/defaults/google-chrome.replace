@@ -1,0 +1,27 @@
+#!/bin/bash
+
+# just grep info about we inside starting SIP gateway process
+sipgw_detect() {
+  tail ${JIBRI_LOGS_DIR}/log.0.txt 2>/dev/null | grep -q 'Starting a SIP gateway' 
+}
+
+# start ffmpeg cross capturing X displays to video devices
+ffmpeg_run() {
+  nohup ffmpeg -re -f x11grab -r 60 -s 1920x1080 -i :0 -f x11grab -r 60 -s 1280x720 -i :1 \
+  -map 0 -vcodec rawvideo -pix_fmt yuv420p -threads 0 -f v4l2 /dev/video1 \
+  -map 1 -vcodec rawvideo -pix_fmt yuv420p -threads 0 -f v4l2 /dev/video0 &>/dev/null &
+}
+
+# durty hack for no cursor on display 0/1
+cursor_hide() {
+  DISPLAY=:0 exec unclutter &>/dev/null &
+  DISPLAY=:1 exec unclutter &>/dev/null &
+}
+
+# prepare start ffmpeg if request to sip gateway
+# will kill it after pjsua finished in /opt/jitsi/jibri/pjsua.sh
+sipgw_detect && cursor_hide && ffmpeg_run
+
+# start google-chrome
+exec /etc/alternatives/google-chrome $@
+

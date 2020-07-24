@@ -134,6 +134,7 @@ services:
             - JIGASI_BREWERY_MUC
             - JIGASI_SIP_URI
             - JIBRI_BREWERY_MUC
+            - JIBRI_SIP_BREWERY_MUC
             - JIBRI_PENDING_TIMEOUT
             - TZ
         networks:

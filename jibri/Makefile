@@ -1,5 +1,4 @@
 build:
-	./patch/builder
-	docker build $(BUILD_ARGS) -t $(JITSI_REPO)/jibri -f patch/Dockerfile .
+	docker build $(BUILD_ARGS) -t $(JITSI_REPO)/jibri -f mod/Dockerfile .
 
 .PHONY: build
