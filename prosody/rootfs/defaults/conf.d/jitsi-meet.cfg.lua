@@ -119,6 +119,7 @@ VirtualHost "{{ .Env.XMPP_GUEST_DOMAIN }}"
     c2s_require_encryption = false;
 {{ end }}
 
+-- hidden domain. JiBRI comes to it with callLogin params
 {{ if .Env.XMPP_RECORDER_DOMAIN }}
 VirtualHost "{{ .Env.XMPP_RECORDER_DOMAIN }}"
     modules_enabled = {
