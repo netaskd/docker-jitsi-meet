@@ -51,9 +51,9 @@ RUN \
 
 RUN patch -d /usr/lib/prosody/modules/muc -p0 < /prosody-plugins/muc_owner_allow_kick.patch
 
-# depricated in prosody 0.11.6
-RUN patch -d /usr/lib/prosody/modules -p0 < /prosody-plugins/mod_websocket_smacks.patch
-RUN sed -i '/local session = sessions\[conn\];/a module:fire_event("websocket-session", { session = session, request = request });' /usr/lib/prosody/modules/mod_websocket.lua
+# Only for prosody 0.11.5. Will depricated in prosody 0.11.6
+RUN patch -d /usr/lib/prosody/modules -p0 < /prosody-plugins/mod_websocket_smacks.patch \
+    && patch -d /usr/lib/prosody/modules -p2 < /prosody-plugins/mod_websocket_session_event.patch
 
 COPY rootfs/ /
 
