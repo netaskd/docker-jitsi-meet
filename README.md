@@ -65,10 +65,30 @@ Before you start please make sure that you have working JWT tokens for jibri-mee
 or apply this dirty hack to jitsi-meet repo (rebuild needed) for using `peopleSearchUrl` with LDAP auth:
 
 ```
-sed -i 's/!isGuest(state)/isLocalParticipantModerator(state)/' jitsi-meet/react/features/invite/functions.js
+sed -i 's/!isGuest(state)/(!isGuest(state) || isLocalParticipantModerator(state))/' jitsi-meet/react/features/invite/functions.js
 
 ```
 Be careful, you need to protect `peopleSearchUrl` url somehow, because when this hack applied, jwt token will always `undefined` and data by url will be accessible from the world.
+
+For tests you can create json like this
+
+```
+[
+    {
+        "id": "1111@sip.domain.com",
+        "name": "Video SIP Device 1",
+        "type": "videosipgw",
+        "avatar": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/GNOME_Video_icon_2019.svg/128px-GNOME_Video_icon_2019.svg.png"
+    },
+    {
+        "id": "2222@sip.domain.com",
+        "name": "Video SIP Device 2",
+        "type": "videosipgw",
+        "avatar": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/GNOME_Video_icon_2019.svg/128px-GNOME_Video_icon_2019.svg.png"
+    }
+]
+```
+and serve it anywhere. In `web/config.js` set properties like `peopleSearchUrl`:`http://path_to_your_json_file` and `peopleSearchQueryTypes`:`['conferenceRooms']`
 
 Also, this repo contains scripts with dirty hacks (around `callLogin`/`callLoginParams`) of JiBRI files for working JiBRI in kinda dual-mode Recorder/SIPgw on the same instance.
 
@@ -178,5 +198,6 @@ Variable | Description | Default value
 
 ## TODO
 
+* Add dedicated XMPP connection for JVB communication (https://github.com/jitsi/jicofo/pull/436)
 * Spot
 * Broadcasting interface (one-to-all). Include streamer mpeg-dash and webstreamer viewer.
