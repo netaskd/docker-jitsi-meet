@@ -168,6 +168,8 @@ Variable | Description | Default value
 
 If you want to enable the WebSockets for XMPP and JVB, these options are required:
 
+For confirm that XMPP Websockets work please make a conference, open dev console and run `APP.conference._room.xmpp.connection.closeWebsocket()`
+
 Variable | Description | Default value
 --- | --- | ---
 `JVB_WS_ENABLE` | Enable WebSockets for XMPP (prosody) and JVB connections | 0
