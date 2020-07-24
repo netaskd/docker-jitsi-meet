@@ -66,7 +66,9 @@ or apply this dirty hack to jitsi-meet repo (rebuild needed) for using `peopleSe
 
 ```
 sed -i 's/!isGuest(state)/isLocalParticipantModerator(state)/' jitsi-meet/react/features/invite/functions.js
+
 ```
+Be careful, you need to protect `peopleSearchUrl` url somehow, because when this hack applied, jwt token will always `undefined` and data by url will be accessible from the world.
 
 Also, this repo contains scripts with dirty hacks (around `callLogin`/`callLoginParams`) of JiBRI files for working JiBRI in kinda dual-mode Recorder/SIPgw on the same instance.
 
