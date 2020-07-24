@@ -72,7 +72,7 @@ insider() {
   echo "== Retreive copy of the source code from ${WEB_PATCH_REPO} ${BRANCH}"
   git clone -b ${BRANCH} --depth 2 ${WEB_PATCH_REPO} /tmp/source || exit 1
   cd /tmp/source
-  git log --max-count=2 --pretty
+  git --no-pager log --max-count=2 --pretty
   echo "========================"
   echo "== Build user is $(whoami)"
   echo "== Install modules and build deb"
