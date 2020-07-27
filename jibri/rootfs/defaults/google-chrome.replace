@@ -18,9 +18,17 @@ cursor_hide() {
   DISPLAY=:1 exec unclutter &>/dev/null &
 }
 
+cleaner() {
+  sleep 5
+  while pidof chromedriver &>/dev/null;do
+    sleep 1
+  done
+  killall -9 ffmpeg unclutter
+}
+
 # prepare start ffmpeg if request to sip gateway
-# will kill it after pjsua finished in /opt/jitsi/jibri/pjsua.sh
-sipgw_detect && cursor_hide && ffmpeg_run
+# kill the setup after chromedriver is finished
+sipgw_detect && cursor_hide && ffmpeg_run && cleaner &
 
 # start google-chrome
 exec /etc/alternatives/google-chrome $@
