@@ -6,8 +6,7 @@
 .make-env-prod
 .make-env-dev
 # builds
-web/patch/build
-jibri/patch/build
+web/mod/git-keys
 # WIP
 streamer
 webstream

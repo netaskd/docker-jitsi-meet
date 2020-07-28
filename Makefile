@@ -1,11 +1,11 @@
 # make sure that .make-env exisis
 include .make-env
-#include .make-env-dev
 export
 
-BUILD_ARGS := --build-arg JITSI_REPO=$(JITSI_REPO)
+BUILD_ARGS := --build-arg JITSI_REPO=${JITSI_REPO}
+BUILD_ARGS += --build-arg WEB_PATCH_REPO=${WEB_PATCH_REPO}
 ifeq ($(FORCE_REBUILD), 1)
-  BUILD_ARGS := $(BUILD_ARGS) --no-cache
+  BUILD_ARGS += --no-cache
 endif
 
 

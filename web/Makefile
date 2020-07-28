@@ -1,5 +1,4 @@
 build:
-	./patch/builder
-	docker build $(BUILD_ARGS) -t $(JITSI_REPO)/web -f patch/Dockerfile .
+	docker build $(BUILD_ARGS) -t $(JITSI_REPO)/web -f mod/Dockerfile .
 
 .PHONY: build
