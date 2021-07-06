@@ -197,7 +197,8 @@ Variable | Description | Default value
 `JVB_WS_ENABLE` | Enable WebSockets for XMPP (prosody) and JVB connections | 0
 
 ## TODO
-
+* tokenAuthUrl for Keycloak
 * Add dedicated XMPP connection for JVB communication (https://github.com/jitsi/jicofo/pull/436)
+* moderatedRoomServiceUrl
 * Spot
 * Broadcasting interface (one-to-all). Include streamer mpeg-dash and webstreamer viewer.
